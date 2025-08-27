@@ -1,0 +1,93 @@
+<!-- BOUTON HAMBURGER : visible uniquement en dessous de sm -->
+<nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <!-- bouton toggle -->
+        <button id="menuToggle"
+          class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+          <span class="sr-only">Open sidebar</span>
+          <!-- icon -->
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <!-- Logo -->
+        <a href="#" class="flex ms-2 md:me-24">
+          <img src="../static/assets/images/logo.png" class="h-12 w-25 me-3" alt="Logo" />
+          <!-- <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Cabinet</span> -->
+        </a>
+      </div>
+            <div class="flex items-center">
+          <div class="flex items-center ms-3">
+            <div>
+              <button type="button"
+        class="flex text-sm rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+        aria-expanded="false"
+        data-dropdown-toggle="dropdown-user">
+  <span class="sr-only">Open user menu</span>
+  <div class="w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center">
+      A
+  </div>
+</button>
+
+            </div>
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+              <div class="px-4 py-3" role="none">
+
+                <p class="text-sm text-gray-900 dark:text-white" role="none">
+                  Awa coulou
+                </p>
+                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                  awa@gmail.com
+                </p>
+
+              </div>
+              <ul class="py-1" role="none">
+                <li>
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Déconnexion</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<aside id="sidebar"
+  class="fixed top-0 left-0 z-40 w-64  h-full pt-20 transition-transform -translate-x-full sm:translate-x-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+  <div class="h-full px-3 pb-4 overflow-y-auto">
+    <!-- menu -->
+    <ul class="space-y-2 font-medium">
+        {% for item in menu %}
+         <li>
+            <a href="{% url item.url %}"  class="flex items-center p-2 rounded
+          {% if request.resolver_match.url_name == item.url %}
+              bg-blue-500 text-white
+          {% else %}
+              text-gray-700 hover:bg-blue-100 hover:text-blue-800
+          {% endif %}
+          transition-colors duration-200">
+              <i class="bi bi-{{ item.icon }} mr-2"></i>
+               <span>{{ item.name }}</span>
+            </a>
+         </li>
+         {% endfor %}
+      </ul>
+  </div>
+</aside>
+
+
+
+<!-- petit JS -->
+<script>
+  const btn = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+
+  btn.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+  });
+</script>
