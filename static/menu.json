@@ -1,6 +1,7 @@
 [
   {"name": "Dashboard", "url": "index", "icon": "speedometer2"},
   {"name": "Parent", "url": "parent", "icon": "people-fill"},
+   {"name": "Filiere", "url": "filiere", "icon": "building"},
   {"name": "Classe", "url": "classe", "icon": "building"},
   {"name": "Etudiant", "url": "etudiant", "icon": "mortarboard-fill"},
   {"name": "Matiere", "url": "matiere", "icon": "book-half"},

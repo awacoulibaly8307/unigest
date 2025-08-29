@@ -7,6 +7,7 @@ class Parent(models.Model):
     prenom = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     motDePasse = models.CharField()
+    date  = models.DateField(auto_now=True)
 
 class Etudiant(models.Model):
    
@@ -14,7 +15,7 @@ class Etudiant(models.Model):
     nom = models.CharField(max_length=255)
     prenom = models.CharField(max_length=255)
     motdepasse = models.TextField(max_length=255)
-    DateNaissance = models. DateField()
+    sexe = models. DateField()
     matricule= models.CharField(max_length=255)
     LieuNaissance = models.DateField()
     sexe = models.TextField(max_length=255)
@@ -28,9 +29,12 @@ class Classe(models.Model):
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE),
     nom = models.CharField()
 
+class Filiere(models.Model):
+    nomfiliere = models.CharField(max_length=255)
+    DateEnregistrement = models.DateField(auto_now=True)
 
 class Matiere(models.Model):
-   
+    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE)
     NomMatiere = models.CharField(max_length=255)
     ceofficient = models.IntegerField()
 

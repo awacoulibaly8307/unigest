@@ -63,57 +63,95 @@ def home(request):
     })
 
 def parent(request):
+    # Charger le menu de navigation (probablement défini dans une fonction utilitaire load_menu)
     menu = load_menu()
-    return render(request,'parent.html',
-                  {
-                      'menu':menu,
-                      'show_sidebar': True,
-                  })
+
+    # Récupérer la liste des parents via un service d'API
+    # Ici, APIService.get_list("parents") appelle l'API et renvoie un tableau d'objets "parents"
+    parent_list = APIService.get_list("parents")
+
+    # Renvoyer la réponse HTTP avec le template "parent.html"
+    # On transmet des variables au template sous forme de dictionnaire :
+    # - 'parent_liste' : la liste des parents pour affichage dans le tableau
+    return render(
+        request,
+        'parent.html',
+        {
+            'menu': menu,
+            'parent_liste': parent_list,
+            'show_sidebar': True,
+        }
+    )
+
 
 def etudiant(request):
     menu = load_menu()
+    etudiant_list = APIService.get_list("etudiants")
     return render(request,'etudiant.html',
                   {
                       'menu':menu,
+                      'etudiant_liste':etudiant_list,
                       'show_sidebar': True,
                   })
 
 def absence(request):
     menu = load_menu()
+    absence_list = APIService.get_list("absences-retards")
     return render(request,'absence.html',
                   {
                       'menu':menu,
+                      'absence_liste': absence_list,
                       'show_sidebar': True,
                   })
 
 def classe(request):
+    classe_list = APIService.get_list("classes")
     menu = load_menu()
     return render(request,'classe.html',
                   {
                       'menu':menu,
+                      'classe_liste': classe_list,
                       'show_sidebar': True,
                   })
 
 def emploi(request):
     menu = load_menu()
+    emploi_list = APIService.get_list("emplois")
     return render(request,'emploi.html',
                   {
                       'menu':menu,
+                      'emploi_liste': emploi_list,
                       'show_sidebar': True,
                   })
 
 def matiere(request):
+    matiere_list = APIService.get_list("matieres")
     menu = load_menu()
     return render(request,'matiere.html',
                   {
                       'menu':menu,
+                     'matiere_liste': matiere_list,
                       'show_sidebar': True,
                   })
 
 def professeur(request):
     menu = load_menu()
+    professeurs_list = APIService.get_list("professeurs")
     return render(request,'professeur.html',
                   {
                       'menu':menu,
+                      'professeurs_liste': professeurs_list,
+                      'show_sidebar': True,
+                  })
+
+
+
+def filiere(request):
+    menu = load_menu()
+    filiere_list = APIService.get_list("filiere")
+    return render(request,'filiere.html',
+                  {
+                      'menu':menu,
+                      'filiere_liste': filiere_list,
                       'show_sidebar': True,
                   })

@@ -5,8 +5,8 @@ from rest_framework import generics
 from django.contrib.auth.models import Group, User
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
-from .models import Parent,Classe,Matiere,Etudiant,Evaluation,Professeur,EmploiDuTemps,AbsenceRetard
-from .serializer import ProfesseurSerializer,ClasseSerializer,ParentSerializer,EtudiantSerializer,MatiereSerializer,EvaluationSerializer,AbsenceRetardSerializer,EmploiDuTempsSerializer
+from .models import Parent, Classe, Matiere, Etudiant, Evaluation, Professeur, EmploiDuTemps, AbsenceRetard, Filiere
+from .serializer import ProfesseurSerializer,ClasseSerializer,ParentSerializer,EtudiantSerializer,MatiereSerializer,EvaluationSerializer,FiliereSerializer,AbsenceRetardSerializer,EmploiDuTempsSerializer
 from rest_framework import viewsets
 from rest_framework import status
 from django.shortcuts import render
@@ -176,4 +176,27 @@ class SingleAbsenceRetardView(generics.RetrieveUpdateDestroyAPIView):
             if self.request.method not in ['GET']:
               permission_classes = [IsAuthenticated]
             return [permission() for permission in permission_classes]
+
+
+class FiliereView(generics.ListCreateAPIView):
+        queryset = Filiere.objects.all().order_by('id')
+        serializer_class = ParentSerializer
+
+        def get_permissions(self):
+              permission_classes = []
+              if self.request.method != 'GET':
+                  permission_classes = [IsAuthenticated]
+
+              return [permission() for permission in permission_classes]
+
+
+class SingleFilieredView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Filiere.objects.all()
+    serializer_class = FiliereSerializer
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method not in ['GET']:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 

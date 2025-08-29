@@ -1,5 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="text-3xl text-green-800">Absence</h1>
+  <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+    📋 Liste des Absences
+  </h1>
+
+  <!-- Conteneur du tableau, avec overflow-x-auto pour gérer le responsive -->
+  <div class="overflow-x-auto shadow-lg rounded-2xl border border-gray-200 dark:border-gray-700">
+
+    <!-- Tableau principal -->
+    <table id="export-table" class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+
+      <!-- En-tête du tableau -->
+      <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wide">
+        <tr>
+          <th scope="col" class="px-6 py-3">Matiere </th>
+          <th scope="col" class="px-6 py-3">Type</th>
+          <th scope="col" class="px-6 py-3">Heure du Debut</th>
+          <th scope="col" class="px-6 py-3">Heure du Fin</th>
+          <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
+        </tr>
+      </thead>
+
+      <!-- Corps du tableau -->
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        {% for item in Absense_liste %}   {# Boucle sur la liste des Absence envoyée par la vue #}
+        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
+          <!-- Colonne Matieret-->
+          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.matiere}}</td>
+          <!-- Colonne Type-->
+          <td class="px-6 py-4">{{ item.type}}
+          <!-- Colonne HeureDebut-->
+          <td class="px-6 py-4">{{ item.heureDebut}}</td>
+          <!-- Colonne HeureFin-->
+          <td class="px-6 py-4">{{ item.heureFin}}</td>
+          <!-- Colonne DateEnregistrement-->
+          <td class="px-6 py-4">{{ item.dateEnregistrement}}</td>
+        </tr>
+        {% endfor %}  {# Fin de la boucle #}
+      </tbody>
+    </table>
+  </div>
 {% endblock content %}

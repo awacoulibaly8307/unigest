@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Django + Tailwind CSS + Flowbite</title>
+    <title>UniGest</title>
 
     <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -38,6 +38,11 @@
     <div class="flex-1 p-6 {% if not disable_sidebar_mt %}mt-14{% endif %} {% if not disable_sidebar_margin %}sm:ml-64{% endif %}">{% block content %}{% endblock %}</div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<!-- Tes scripts locaux -->
+  <script src="{% static 'js/export-table.js' %}" defer></script>
+  <script src="{% static 'js/modal-button.js' %}" defer></script>
+  <script src="{% static 'js/toggle.js' %}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
 </body>
 
 </html>

@@ -23,7 +23,7 @@ class APIService:
     def get_list(resource):
         """Récupère la liste d'une ressource"""
         response = requests.get(f"{BASE_URL}{resource}")
-        # print(response.status_code, response.text)
+        print(response.status_code, response.text)
         response.raise_for_status()
         return response.json()
 

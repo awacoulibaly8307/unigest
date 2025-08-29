@@ -7,21 +7,22 @@ from .api_views import (
     EvaluationView, SingleEvaluationiew,
     ProfesseurView, SingleProfessuerView,
     EmploiDuTempsView, SingleEmploiDuTempsView,
-    AbsanceRetardView, SingleAbsenceRetardView
+    AbsanceRetardView, SingleAbsenceRetardView,
+    FiliereView,       SingleFilieredView
 )
 
 urlpatterns = [
     # Parents
-    path('parents/', ParentView.as_view(), name='parent-list'),
-    path('parents/<int:pk>/', SingleParentView.as_view(), name='parent-detail'),
+    path('parents/', ParentView.as_view()),
+    path('parents/<int:pk>/', SingleParentView.as_view()),
 
     # Classes
-    path('classes/', ClasseView.as_view(), name='classe-list'),
-    path('classes/<int:pk>/', SingleClasseView.as_view(), name='classe-detail'),
+    path('classes/', ClasseView.as_view()),
+    path('classes/<int:pk>/', SingleClasseView.as_view()),
 
     # Matières
-    path('matieres/', MatiereView.as_view(), name='matiere-list'),
-    path('matieres/<int:pk>/', SingleMatiereView.as_view(), name='matiere-detail'),
+    path('matieres/', MatiereView.as_view()),
+    path('matieres/<int:pk>/', SingleMatiereView.as_view()),
 
     # Étudiants
     path('etudiants/', EtudiantView.as_view(), name='etudiant-list'),
@@ -40,6 +41,11 @@ urlpatterns = [
     path('emplois/<int:pk>/', SingleEmploiDuTempsView.as_view(), name='emploi-detail'),
 
     # Absences & Retards
-    path('absences-retards/', AbsanceRetardView.as_view(), name='absenceretard-list'),
+    path('absences-retards/', AbsanceRetardView.as_view()),
     path('absences-retards/<int:pk>/', SingleAbsenceRetardView.as_view(), name='absenceretard-detail'),
+
+    # Fliere
+    path('filiere/', FiliereView.as_view()),
+    path('filiere/<int:pk>/', SingleFilieredView.as_view(), name="filiere"),
+
 ]
