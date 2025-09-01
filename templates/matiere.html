@@ -14,7 +14,8 @@
       <!-- En-tête du tableau -->
       <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wide">
         <tr>
-          <th scope="col" class="px-6 py-3">Matiere </th>
+          <th scope="col" class="px-6 py-3">Matiere</th>
+          <th scope="col" class="px-6 py-3">Filiere</th>
           <th scope="col" class="px-6 py-3">Ceofficient</th>
         </tr>
       </thead>
@@ -26,6 +27,7 @@
           <!-- Colonne NomMatiere-->
           <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.NomMatiere}}</td>
           <!-- Colonne Ceofficient -->
+          <td class="px-6 py-4">{{ item.filiere.nomfiliere }}</td>
           <td class="px-6 py-4">{{ item.ceofficient }}</td>
         </tr>
         {% endfor %}  {# Fin de la boucle #}

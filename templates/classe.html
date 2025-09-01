@@ -2,7 +2,7 @@
 
 {% block content %}
    <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-    📋 Liste des Classes
+    📋 Liste des Salles
   </h1>
 
   <!-- Conteneur du tableau, avec overflow-x-auto pour gérer le responsive -->
@@ -14,8 +14,9 @@
       <!-- En-tête du tableau -->
       <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wide">
         <tr>
-          <th scope="col" class="px-6 py-3">Etudiant </th>
-          <th scope="col" class="px-6 py-3">Nom</th>
+          <th scope="col" class="px-6 py-3">Nom de la salle </th>
+          <th scope="col" class="px-6 py-3">Filiere</th>
+           <th scope="col" class="px-6 py-3">Année universitaire</th>
         </tr>
       </thead>
 
@@ -24,9 +25,10 @@
         {% for item in classes_liste %}   {# Boucle sur la liste des classes envoyée par la vue #}
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
           <!-- Colonne etudiant-->
-          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.etudiant}}</td>
+          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.nom}}</td>
           <!-- Colonne nom -->
-          <td class="px-6 py-4">{{ item.nom }}</td>
+          <td class="px-6 py-4">{{ item.filiere.nomfiliere }}</td>
+          <td class="px-6 py-4">{{ item.annee_universitaire }}</td>
         </tr>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>

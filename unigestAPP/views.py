@@ -148,7 +148,7 @@ def professeur(request):
 
 def filiere(request):
     menu = load_menu()
-    filiere_list = APIService.get_list("filiere")
+    filiere_list = APIService.get_list("filieres")
     return render(request,'filiere.html',
                   {
                       'menu':menu,

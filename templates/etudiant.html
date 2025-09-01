@@ -16,12 +16,12 @@
         <tr>
           <th scope="col" class="px-6 py-3">Nom</th>
           <th scope="col" class="px-6 py-3">Prenom</th>
-          <th scope="col" class="px-6 py-3">LieuNaissanc</th>
-          <th scope="col" class="px-6 py-3"> Matricule</th>
-          <th scope="col" class="px-6 py-3"> Email</th>
-          <th scope="col" class="px-6 py-3"> Adresse</th>
-          <th scope="col" class="px-6 py-3">  Telephon</th>
-          <th scope="col" class="px-6 py-3">   Sexe</th>
+          <th scope="col" class="px-6 py-3">Date de naissance</th>
+          <th scope="col" class="px-6 py-3">Matricule</th>
+          <th scope="col" class="px-6 py-3">Email</th>
+          <th scope="col" class="px-6 py-3">Telephone</th>
+          <th scope="col" class="px-6 py-3">Sexe</th>
+           <th scope="col" class="px-6 py-3">Classe</th>
         </tr>
       </thead>
 
@@ -34,7 +34,7 @@
           <!-- Colonne Prénom -->
           <td class="px-6 py-4">{{ item.prenom }}</td>
           <!-- Colonne LieuNaissance (affiché en bleu souligné) -->
-          <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.LieuNaissance }}</td>
+          <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.dateNaissance }}</td>
           <!-- Colonne  matricule -->
           <td class="px-6 py-4">{{ item.matricule}}</td>
           <!-- Colonne  email-->
@@ -45,6 +45,7 @@
           <td class="px-6 py-4">{{ item.telephone}}</td>
           <!-- Colonne  sexe-->
           <td class="px-6 py-4">{{ item.sexe}}</td>
+          <td class="px-6 py-4">{{ item.classe.nom}}</td>
         </tr>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>

@@ -54,7 +54,7 @@ class SingleClasseView(generics.RetrieveUpdateDestroyAPIView):
 
 class MatiereView(generics.ListCreateAPIView):
                 queryset = Matiere.objects.all().order_by('id')
-                serializer_class = ParentSerializer
+                serializer_class = MatiereSerializer
                 def get_permissions(self):
                     permission_classes = []
                     if self.request.method != 'GET':
@@ -113,7 +113,7 @@ class SingleEvaluationiew(generics.RetrieveUpdateDestroyAPIView):
 
 class ProfesseurView(generics.ListCreateAPIView):
             queryset = Professeur.objects.all().order_by('id')
-            serializer_class = ParentSerializer
+            serializer_class = ProfesseurSerializer
             def get_permissions(self):
                 permission_classes = []
                 if self.request.method != 'GET':
@@ -180,7 +180,7 @@ class SingleAbsenceRetardView(generics.RetrieveUpdateDestroyAPIView):
 
 class FiliereView(generics.ListCreateAPIView):
         queryset = Filiere.objects.all().order_by('id')
-        serializer_class = ParentSerializer
+        serializer_class = FiliereSerializer
 
         def get_permissions(self):
               permission_classes = []

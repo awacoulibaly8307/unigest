@@ -12,7 +12,5 @@ urlpatterns = [
     path('professeur/', professeur, name='professeur'),
     path('parent/', parent, name='parent'),
     path('filiere/', filiere, name='filiere'),
-
-
 ]
 

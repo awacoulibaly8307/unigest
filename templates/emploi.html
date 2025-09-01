@@ -27,15 +27,13 @@
         {% for item in emploi_liste %}   {# Boucle sur la liste des emploi du temp envoyée par la vue #}
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
           <!-- Colonne matiere-->
-          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.matiere}}</td>
-          <!-- Colonne classe -->
-          <td class="px-6 py-4">{{ item.classe }}</td>
+          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.matiere.nom}}</td>
           <!-- Colonne jour -->
           <td class="px-6 py-4">{{ item.jour }}</td>
           <!-- Colonne datedebut -->
-          <td class="px-6 py-4">{{ item.datedebut }}</td>
+          <td class="px-6 py-4">{{ item.date_debut }}</td>
           <!-- Colonne datefin -->
-          <td class="px-6 py-4">{{ item.datefin }}</td>
+          <td class="px-6 py-4">{{ item.date_fin }}</td>
         </tr>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>

@@ -45,7 +45,7 @@ urlpatterns = [
     path('absences-retards/<int:pk>/', SingleAbsenceRetardView.as_view(), name='absenceretard-detail'),
 
     # Fliere
-    path('filiere/', FiliereView.as_view()),
-    path('filiere/<int:pk>/', SingleFilieredView.as_view(), name="filiere"),
+    path('filieres/', FiliereView.as_view()),
+    path('filieres/<int:pk>/', SingleFilieredView.as_view()),
 
 ]
