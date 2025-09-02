@@ -76,9 +76,9 @@ class Evaluation(models.Model):
 
 
 class EmploiDuTemps(models.Model):
-
+    professeur = models.ForeignKey(Professeur, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
-    classe = models.ForeignKey("Classe", on_delete=models.CASCADE)
+    classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
     jour = models.CharField(max_length=20)
     heure_debut = models.TimeField()
     heure_fin = models.TimeField()
@@ -89,7 +89,7 @@ class EmploiDuTemps(models.Model):
 
 class AbsenceRetard(models.Model):
 
-    etudiant = models.ForeignKey("Etudiant", on_delete=models.CASCADE)
+    etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
     type = models.CharField(max_length=20)
     heure_debut = models.TimeField()

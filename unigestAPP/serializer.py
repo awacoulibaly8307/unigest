@@ -56,8 +56,9 @@ class EvaluationSerializer(serializers.ModelSerializer):
 
 
 class EmploiDuTempsSerializer(serializers.ModelSerializer):
-    classe = ClasseSerializer(read_only=True)    # détail classe
-    matiere = MatiereSerializer(read_only=True)  # détail matière
+    classe = ClasseSerializer(read_only=True)
+    matiere = MatiereSerializer(read_only=True)
+    professeur = ProfesseurSerializer(read_only=True)
 
     class Meta:
         model = EmploiDuTemps

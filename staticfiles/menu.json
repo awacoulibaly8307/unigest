@@ -1,0 +1,11 @@
+[
+  {"name": "Dashboard", "url": "index", "icon": "speedometer2"},
+  {"name": "Parent", "url": "parent", "icon": "people-fill"},
+   {"name": "Filiere", "url": "filiere", "icon": "building"},
+  {"name": "Salle", "url": "classe", "icon": "building"},
+  {"name": "Etudiant", "url": "etudiant", "icon": "mortarboard-fill"},
+  {"name": "Matiere", "url": "matiere", "icon": "book-half"},
+  {"name": "Professeur", "url": "professeur", "icon": "person-badge-fill"},
+  {"name": "Emploi du temps", "url": "emploi", "icon": "calendar3"},
+  {"name": "Absence", "url": "absence", "icon": "person-x-fill"}
+]

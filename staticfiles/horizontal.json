@@ -1,0 +1,7 @@
+[
+    {"name": "Classe", "url": "classe", "icon": "building", "num": 10},
+    {"name": "Etudiant", "url": "etudiant", "icon": "mortarboard-fill", "num": 120},
+    {"name": "Matiere", "url": "matiere", "icon": "book-half", "num": 20},
+    {"name": "Professeur", "url": "professeur", "icon": "person-badge-fill", "num": 8},
+    {"name": "Absence", "url": "absence", "icon": "person-x-fill", "num": 5}
+]
