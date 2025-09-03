@@ -83,6 +83,16 @@ def parent(request):
         }
     )
 
+def delete_parent(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("parents", pk, token=token)
+            if result:
+                messages.success(request, "parent supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("parent")
 
 def etudiant(request):
     menu = load_menu()
@@ -94,6 +104,17 @@ def etudiant(request):
                       'show_sidebar': True,
                   })
 
+def delete_etudiant(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("etudiants", pk, token=token)
+            if result:
+                messages.success(request, "etudiants supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("etudiant")
+
 def absence(request):
     menu = load_menu()
     absence_list = APIService.get_list("absences-retards")
@@ -103,6 +124,17 @@ def absence(request):
                       'absence_liste': absence_list,
                       'show_sidebar': True,
                   })
+
+def delete_absence(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("absences-retards", pk, token=token)
+            if result:
+                messages.success(request, "absences-retards supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("absence")
 
 def classe(request):
     classe_list = APIService.get_list("classes")
@@ -114,6 +146,17 @@ def classe(request):
                       'show_sidebar': True,
                   })
 
+def delete_classe(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("classes", pk, token=token)
+            if result:
+                messages.success(request, "classes supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("classe")
+
 def emploi(request):
     menu = load_menu()
     emploi_list = APIService.get_list("emplois")
@@ -123,6 +166,17 @@ def emploi(request):
                       'emploi_liste': emploi_list,
                       'show_sidebar': True,
                   })
+
+def delete_emploi(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("emplois", pk, token=token)
+            if result:
+                messages.success(request, "emplois supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("emploi")
 
 def matiere(request):
     matiere_list = APIService.get_list("matieres")
@@ -134,6 +188,17 @@ def matiere(request):
                       'show_sidebar': True,
                   })
 
+def delete_matiere(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("matieres", pk, token=token)
+            if result:
+                messages.success(request, "matieres supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("matiere")
+
 def professeur(request):
     menu = load_menu()
     professeurs_list = APIService.get_list("professeurs")
@@ -144,7 +209,16 @@ def professeur(request):
                       'show_sidebar': True,
                   })
 
-
+def delete_professeur(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("professeurs", pk, token=token)
+            if result:
+                messages.success(request, "professeurs supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("professeur")
 
 def filiere(request):
     menu = load_menu()
@@ -155,3 +229,14 @@ def filiere(request):
                       'filiere_liste': filiere_list,
                       'show_sidebar': True,
                   })
+
+def delete_filiere(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("filieres", pk, token=token)
+            if result:
+                messages.success(request, "filieres supprimé avec succès")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur : {e}")
+    return redirect("filiere")

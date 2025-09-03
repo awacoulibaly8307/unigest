@@ -185,7 +185,7 @@ class APIService:
             headers = APIService._headers(token)
 
             response = requests.delete(url, headers=headers)
-            print("reponse server", response.status_code, response._content)
+            print("reponse server", response.status_code)
             response.raise_for_status()
             return True
         except Exception as e:
