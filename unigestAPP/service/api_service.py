@@ -54,29 +54,19 @@ class APIService:
     @staticmethod
     def create(resource, data, token=None):
         """Ajoute un élément"""
-
         try:
             headers = {}
-
             if token:
-                headers['Authorization'] = f"Token {token}"  # ou Bearer
-                print("token:", token)
+                headers['Authorization'] = f"Token {token}"
 
-            response = requests.post(f"{BASE_URL}{resource}", json=data, headers=headers)
+            response = requests.post(f"{BASE_URL}{resource}/", json=data, headers=headers)
             response.raise_for_status()
-            return response.json()
+            return response  # ⬅️ retourne l’objet complet
 
         except requests.exceptions.HTTPError as http_err:
-            # Retourner le message d'erreur précis du backend
-            try:
-                print("erreur", str(response.json()))
-                return {"error": response.json()}
-            except:
-                print("erreur", str(http_err))
-                return {"error": str(http_err)}
+            return response  # ⬅️ tu pourras vérifier .status_code dans la vue
         except Exception as err:
-            print("erreur", str(err))
-            return {"error": str(err)}
+            return None
 
     @staticmethod
     def createFormData(resource, data, files=None, token=None):

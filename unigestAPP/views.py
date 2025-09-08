@@ -63,24 +63,67 @@ def home(request):
     })
 
 def parent(request):
-    # Charger le menu de navigation (probablement défini dans une fonction utilitaire load_menu)
     menu = load_menu()
+    auth_token = request.session.get('auth_token')
 
-    # Récupérer la liste des parents via un service d'API
-    # Ici, APIService.get_list("parents") appelle l'API et renvoie un tableau d'objets "parents"
+    if request.method == "POST":
+        data = {
+            "nom": request.POST.get("nom"),
+            "prenom": request.POST.get("prenom"),
+            "email": request.POST.get("email"),
+            "motDePasse": request.POST.get("motDePasse"),
+        }
+
+        response = APIService.create("parents", data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Parent ajouté avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+        # Rediriger vers la même page après le POST
+        return redirect("parent")  # utilise le name de ton url dans urls.py
+
+    # ⚡ Ici la liste est rechargée à chaque GET
     parent_list = APIService.get_list("parents")
 
-    # Renvoyer la réponse HTTP avec le template "parent.html"
-    # On transmet des variables au template sous forme de dictionnaire :
-    # - 'parent_liste' : la liste des parents pour affichage dans le tableau
     return render(
         request,
-        'parent.html',
+        "parent.html",
         {
-            'menu': menu,
-            'parent_liste': parent_list,
-            'show_sidebar': True,
+            "menu": menu,
+            "parent_liste": parent_list,
+            "show_sidebar": True,
         }
+    )
+def edit_parent(request, pk):
+    menu = load_menu()
+    auth_token = request.session.get('auth_token')
+    # Charger les données existantes
+    parent_data = APIService.get_detail("parents", pk,auth_token)
+
+    if request.method == "POST":
+        data = {
+            "nom": request.POST.get("nom"),
+            "prenom": request.POST.get("prenom"),
+            "email": request.POST.get("email"),
+            "motDePasse": request.POST.get("motDePasse"),
+        }
+
+        response = APIService.update("parents", pk, data,auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Parent ajouté avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+        # Rediriger vers la même page après le POST
+        return redirect("parent")
+
+    return render(
+        request,
+        "parent.html",
+        {"menu": menu, "parent": parent_data, "show_sidebar": True},
     )
 
 def delete_parent(request, pk):
