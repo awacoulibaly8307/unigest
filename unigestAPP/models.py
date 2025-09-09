@@ -22,7 +22,6 @@ class Classe(models.Model):
     def __str__(self):
         return self.nom
 
-
 class Etudiant(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)  # relation correcte
@@ -39,6 +38,7 @@ class Etudiant(models.Model):
     def __str__(self):
         return f"{self.nom} {self.prenom}"
 
+    
 
 class Matiere(models.Model):
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE)

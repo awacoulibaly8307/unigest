@@ -103,6 +103,7 @@ def edit_parent(request, pk):
     parent_data = APIService.get_detail("parents", pk,auth_token)
 
     if request.method == "POST":
+
         data = {
             "nom": request.POST.get("nom"),
             "prenom": request.POST.get("prenom"),
@@ -113,7 +114,7 @@ def edit_parent(request, pk):
         response = APIService.update("parents", pk, data,auth_token)
 
         if "error" not in response:
-            messages.success(request, "Parent ajouté avec succès")
+            messages.success(request, "Ajouté avec succès")
         else:
             messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
 
@@ -140,12 +141,12 @@ def delete_parent(request, pk):
 def etudiant(request):
     menu = load_menu()
     etudiant_list = APIService.get_list("etudiants")
-    return render(request,'etudiant.html',
-                  {
-                      'menu':menu,
-                      'etudiant_liste':etudiant_list,
-                      'show_sidebar': True,
-                  })
+    return render(request, "etudiant.html", {
+        "menu": menu,
+        "etudiant_list": etudiant_list,
+        "show_sidebar": True,
+    })
+
 
 def delete_etudiant(request, pk):
     if request.method == "POST":
@@ -263,15 +264,62 @@ def delete_professeur(request, pk):
             messages.error(request, f"Erreur : {e}")
     return redirect("professeur")
 
+
 def filiere(request):
     menu = load_menu()
     filiere_list = APIService.get_list("filieres")
+
+    auth_token = request.session.get("auth_token")
+
+    if request.method == "POST":
+        data = {
+            "nomfiliere": request.POST.get("nomfiliere"),
+        }
+
+        response = APIService.create("filieres", data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Ajouté avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+            # Rediriger vers la même page après le POST
+        return redirect("filiere")
+
     return render(request,'filiere.html',
                   {
                       'menu':menu,
                       'filiere_liste': filiere_list,
                       'show_sidebar': True,
                   })
+
+def edit_filiere(request, pk):
+    menu = load_menu()
+    auth_token = request.session.get("auth_token")
+
+    # Charger la filière existante
+    filiere_data = APIService.get_detail("filieres", pk)
+
+    if request.method == "POST":
+        data = {
+            "nomfiliere": request.POST.get("nomfiliere"),
+        }
+
+        response = APIService.update("filieres", pk, data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Modifier avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+            # Rediriger vers la même page après le POST
+        return redirect("filiere")
+
+    return render(
+        request,
+        "filiere.html",
+        {"menu": menu, "filiere": filiere_data, "show_sidebar": True}
+    )
 
 def delete_filiere(request, pk):
     if request.method == "POST":
