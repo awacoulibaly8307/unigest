@@ -8,11 +8,18 @@ class FiliereSerializer(serializers.ModelSerializer):
 
 
 class ClasseSerializer(serializers.ModelSerializer):
-    filiere = FiliereSerializer(read_only=True)  # détail de la filière
+    filiere_detail = FiliereSerializer(source='filiere', read_only=True)
 
     class Meta:
         model = Classe
-        fields = "__all__"
+        fields = [
+            'id',
+            'filiere_detail',
+            'filiere',
+            'nom',
+            'description',
+            'annee_universitaire'
+        ]
 
 
 class ParentSerializer(serializers.ModelSerializer):

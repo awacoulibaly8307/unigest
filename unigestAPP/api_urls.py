@@ -12,7 +12,7 @@ from .api_views import (
     AbsanceRetardView, SingleAbsenceRetardView,
     FiliereView,       SingleFilieredView,
 )
-from .views import delete_parent,delete_filiere,edit_filiere,edit_parent,delete_etudiant,delete_matiere,delete_professeur,delete_classe,delete_emploi,delete_absence
+from .views import delete_parent,delete_filiere,edit_classe,edit_filiere,edit_parent,delete_etudiant,delete_matiere,delete_professeur,delete_classe,delete_emploi,delete_absence
 
 urlpatterns = [
     # Parents
@@ -25,6 +25,7 @@ urlpatterns = [
     path('classes/', ClasseView.as_view()),
     path('classes/<int:pk>', SingleClasseView.as_view()),
     path('classes/<int:pk>/delete', delete_classe, name='delete_classe'),
+    path('classes/<int:pk>/edit', edit_classe, name='edit_classe'),
 
     # Matières
     path('matieres/', MatiereView.as_view()),

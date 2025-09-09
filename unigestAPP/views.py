@@ -181,14 +181,67 @@ def delete_absence(request, pk):
     return redirect("absence")
 
 def classe(request):
+    auth_token = request.session.get('auth_token')
     classe_list = APIService.get_list("classes")
+    filiere_list = APIService.get_list("filieres")
     menu = load_menu()
+
+    if request.method == "POST":
+        data = {
+            "nom": request.POST.get("nom"),
+            "description": request.POST.get("description"),
+            "filiere": request.POST.get("filiere"),
+            "annee_universitaire": request.POST.get("annee_universitaire"),
+        }
+
+        response = APIService.create("classes", data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "ajouté avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+        # Rediriger vers la même page après le POST
+        return redirect("classe")
+
     return render(request,'classe.html',
                   {
                       'menu':menu,
+                      'filiere_list':filiere_list,
                       'classe_liste': classe_list,
                       'show_sidebar': True,
                   })
+
+def edit_classe(request, pk):
+    auth_token = request.session.get('auth_token')
+    menu = load_menu()
+
+    # Récupérer la classe à modifier
+    classe_list = APIService.get_list("classes")
+    filiere_list = APIService.get_list("filieres")
+
+    if request.method == "POST":
+        data = {
+            "nom": request.POST.get("nom"),
+            "description": request.POST.get("description"),
+            "filiere": request.POST.get("filiere"),  # ⚠️ important
+            "annee_universitaire": request.POST.get("annee_universitaire"),
+        }
+
+        response = APIService.update("classes", pk, data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Classe modifiée avec succès")
+            return redirect("classe")
+        else:
+            messages.error(request, f"Erreur lors de la modification : {response['error']}")
+
+    return render(request, "classe.html", {
+        "menu": menu,
+        "classe_liste": classe_list,
+        "filiere_list": filiere_list,
+        "show_sidebar": True,
+    })
 
 def delete_classe(request, pk):
     if request.method == "POST":
