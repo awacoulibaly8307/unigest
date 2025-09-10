@@ -4,13 +4,13 @@ from .views import *
 urlpatterns = [
     path('', home, name='home'),
     path('index/', index, name='index'),
-    path('absence/', absence, name='absence'),
-    path('classe/', classe, name='classe'),
-    path('emploi/', emploi, name='emploi'),
-    path('etudiant/', etudiant, name='etudiant'),
-    path('matiere/', matiere, name='matiere'),
-    path('professeur/', professeur, name='professeur'),
-    path('parent/', parent, name='parent'),
-    path('filiere/', filiere, name='filiere'),
+    path('absences-retards/', absence, name='absences-retards'),
+    path('classes/', classe, name='classes'),
+    path('emplois/', emploi, name='emplois'),
+    path('etudiants/', etudiant, name='etudiants'),
+    path('matieres/', matiere, name='matieres'),
+    path('professeurs/', professeur, name='professeurs'),
+    path('parents/', parent, name='parents'),
+    path('filieres/', filiere, name='filieres'),
 ]
 

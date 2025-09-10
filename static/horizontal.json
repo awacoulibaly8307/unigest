@@ -1,7 +1,7 @@
 [
-    {"name": "Classe", "url": "classe", "icon": "building", "num": 10},
-    {"name": "Etudiant", "url": "etudiant", "icon": "mortarboard-fill", "num": 120},
-    {"name": "Matiere", "url": "matiere", "icon": "book-half", "num": 20},
-    {"name": "Professeur", "url": "professeur", "icon": "person-badge-fill", "num": 8},
-    {"name": "Absence", "url": "absence", "icon": "person-x-fill", "num": 5}
+    {"name": "Classe", "url": "classes", "icon": "building"},
+    {"name": "Etudiant", "url": "etudiants", "icon": "mortarboard-fill"},
+    {"name": "Matiere", "url": "matieres", "icon": "book-half"},
+    {"name": "Professeur", "url": "professeurs", "icon": "person-badge-fill"},
+    {"name": "Absence", "url": "absences-retards", "icon": "person-x-fill"}
 ]

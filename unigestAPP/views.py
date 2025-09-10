@@ -24,6 +24,13 @@ def index(request):
     menu = load_menu()
     hori = load_hor()
 
+    for item in hori:
+        try:
+            count = len(APIService.get_list(item["url"]))
+        except Exception as e:
+            count = 0
+        item["num"] = count
+
     return render(request,'index.html',
                   {
                       'menu':menu,
