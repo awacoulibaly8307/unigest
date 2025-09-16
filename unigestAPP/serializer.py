@@ -29,20 +29,41 @@ class ParentSerializer(serializers.ModelSerializer):
 
 
 class EtudiantSerializer(serializers.ModelSerializer):
-    parent = ParentSerializer(read_only=True)   # détail du parent
-    classe = ClasseSerializer(read_only=True)   # détail de la classe
+    parent_detail = ParentSerializer(source='parent', read_only=True)
+    classe_detail = ClasseSerializer(source='classe', read_only=True)
 
     class Meta:
         model = Etudiant
-        fields = "__all__"
+        fields = [
+             'id',
+            'parent',
+            'parent_detail',
+            'classe',
+            'classe_detail',
+            'motdepasse',
+            'nom',
+            'prenom',
+            'sexe',
+            'matricule',
+            'dateNaissance',
+            'adresse',
+            'telephone',
+            'email'
+        ]
 
 
 class MatiereSerializer(serializers.ModelSerializer):
-    filiere = FiliereSerializer(read_only=True)  # détail de la filière
+    filiere_detail = FiliereSerializer(source='filiere', read_only=True)
 
     class Meta:
         model = Matiere
-        fields = "__all__"
+        fields = [
+            'id',
+            'filiere',
+            'filiere_detail',
+            'nom',
+            'coefficient'
+        ]
 
 
 class ProfesseurSerializer(serializers.ModelSerializer):

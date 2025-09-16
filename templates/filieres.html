@@ -47,6 +47,12 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nom" />
           </div>
+           <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Groupe</label>
+            <input type="text" name="groupe"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="groupe" />
+          </div>
         </div>
 
         <button type="submit" id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
@@ -73,6 +79,7 @@
       <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wide">
         <tr>
           <th scope="col" class="px-6 py-3">Nom du Filiere</th>
+          <th scope="col" class="px-6 py-3">Groupe</th>
           <th scope="col" class="px-6 py-3">Date D'enregistrement</th>
            <th scope="col" class="px-6 py-3">Action</th>
         </tr>
@@ -85,6 +92,7 @@
           <!-- Colonne omfiliere-->
           <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.nomfiliere}}</td>
           <!-- Colonne DateEnregistrement -->
+          <td class="px-6 py-4">{{ item.groupe }}</td>
           <td class="px-6 py-4">{{ item.DateEnregistrement }}</td>
           <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-2">
@@ -167,7 +175,7 @@
           <!-- Modal header -->
           <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Modification du rendez-vous
+              Modification
             </h3>
             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5
                        inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -188,6 +196,12 @@
             <div>
             <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Non Filière</label>
             <input type="text" name="nomfiliere" value="{{item.nomfiliere}}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            />
+          </div>
+              <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Groupe</label>
+            <input type="text" name="groupe" value="{{item.groupe}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             />
           </div>

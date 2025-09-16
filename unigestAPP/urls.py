@@ -13,4 +13,3 @@ urlpatterns = [
     path('parents/', parent, name='parents'),
     path('filieres/', filiere, name='filieres'),
 ]
-

@@ -62,6 +62,12 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="email" required />
           </div>
+          <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléphone</label>
+            <input type="text" name="telephone"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="telephone" required />
+          </div>
            <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
             <input type="text" name="motDePasse"
@@ -98,6 +104,7 @@
           <th scope="col" class="px-6 py-3">Nom</th>
           <th scope="col" class="px-6 py-3">Prénom</th>
           <th scope="col" class="px-6 py-3">Email</th>
+           <th scope="col" class="px-6 py-3">Téléphone</th>
           <th scope="col" class="px-6 py-3">Date création</th>
           <th scope="col" class="px-6 py-3">Action</th>
         </tr>
@@ -113,6 +120,7 @@
           <td class="px-6 py-4">{{ item.prenom }}</td>
           <!-- Colonne Email (affiché en bleu souligné) -->
           <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.email }}</td>
+          <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.telephone }}</td>
           <!-- Colonne Date de création -->
           <td class="px-6 py-4">{{ item.date }}</td>
            <td class="px-4 py-3 text-center">
@@ -211,6 +219,7 @@
       <p><b>Nom :</b> {{ item.nom }}</p>
       <p><b>Prénom :</b> {{ item.prenom }}</p>
       <p><b>Email :</b> {{ item.email }}</p>
+      <p><b>Téléphone :</b> {{ item.telephone }}</p>
       <p><b>Date création :</b> {{ item.date }}</p>
     </div>
 
@@ -264,6 +273,12 @@
             <input type="text" name="email" value="{{item.email}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="email" required />
+          </div>
+              <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléphone</label>
+            <input type="text" name="telephone" value="{{item.telephone}}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="téléphone" required />
           </div>
            <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>

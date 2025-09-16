@@ -7,10 +7,12 @@ class Parent(models.Model):
     prenom = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     motDePasse = models.CharField()
+    telephone = models.CharField(max_length=20)
     date  = models.DateField(auto_now=True)
 
 class Filiere(models.Model):
     nomfiliere = models.CharField(max_length=255)
+    groupe = models.CharField(max_length=255)
     DateEnregistrement = models.DateField(auto_now=True)
 
 class Classe(models.Model):

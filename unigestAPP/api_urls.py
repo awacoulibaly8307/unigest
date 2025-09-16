@@ -12,7 +12,7 @@ from .api_views import (
     AbsanceRetardView, SingleAbsenceRetardView,
     FiliereView,       SingleFilieredView,
 )
-from .views import delete_parent,delete_filiere,edit_classe,edit_filiere,edit_parent,delete_etudiant,delete_matiere,delete_professeur,delete_classe,delete_emploi,delete_absence
+from .views import delete_parent,edit_etudiant,edit_matiere,delete_filiere,edit_classe,edit_filiere,edit_parent,delete_etudiant,delete_matiere,delete_professeur,delete_classe,delete_emploi,delete_absence
 
 urlpatterns = [
     # Parents
@@ -30,12 +30,14 @@ urlpatterns = [
     # Matières
     path('matieres/', MatiereView.as_view()),
     path('matieres/<int:pk>', SingleMatiereView.as_view()),
+    path('matieres/<int:pk>/edit', edit_matiere, name ='edit_matiere'),
     path('matieres/<int:pk>/delete', delete_matiere, name ='delete_matiere'),
 
     # Étudiants
-    path('etudiants/', EtudiantView.as_view(), name='etudiant-list'),
-    path('etudiants/<int:pk>', SingleEtudiantView.as_view(), name='etudiant-detail'),
+    path('etudiants/', EtudiantView.as_view()),
+    path('etudiants/<int:pk>', SingleEtudiantView.as_view()),
     path('etudiants/<int:pk>/delete', delete_etudiant, name='delete_etudiant'),
+    path('etudiants/<int:pk>/edit', edit_etudiant, name='edit_etudiant'),
 
     # Évaluations
     path('evaluations/', EvaluationView.as_view(), name='evaluation-list'),
