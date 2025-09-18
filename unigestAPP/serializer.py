@@ -94,9 +94,18 @@ class EmploiDuTempsSerializer(serializers.ModelSerializer):
 
 
 class AbsenceRetardSerializer(serializers.ModelSerializer):
-    etudiant = EtudiantSerializer(read_only=True)  # détail étudiant
-    matiere = MatiereSerializer(read_only=True)    # détail matière
+    matiere_detail = MatiereSerializer(source='matiere', read_only=True)
+    etudiant_detail = EtudiantSerializer(source='etudiant', read_only=True)
 
     class Meta:
         model = AbsenceRetard
-        fields = "__all__"
+        fields = [
+            'etudiant',
+            'etudiant_detail',
+            'id',
+            'matiere',
+            'matiere_detail',
+            'type',
+            'heure_debut',
+            'heure_fin'
+        ]

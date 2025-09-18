@@ -1,12 +1,9 @@
-{% extends "base.html" %}  {# On hérite du template principal base.html #}
+{% extends "base.html" %}
 
-{% block content %}  {# Début du bloc "content" qui sera injecté dans base.html #}
-
-  <!-- Titre principal de la page -->
-
-<div class="flex items-center justify-between mb-6">
+{% block content %}
+  <div class="flex items-center justify-between mb-6">
   <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-    📋 Liste des parents
+    📋 Liste des abscences
   </h1>
   <button id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="flex items-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300
            font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700
@@ -44,35 +41,55 @@
       <form method="post">
         {% csrf_token %}
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
+
           <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Non</label>
-            <input type="text" name="nom"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nom" />
-          </div>
-           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prenom</label>
-            <input type="text" name="prenom"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Prenom" />
-          </div>
-           <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="text" name="email"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="email" required />
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Etudiant</label>
+            <select name="etudiant" id="etudiant"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.etudiant %}selected{% endif %}>Selectionner un etudiant
+                  </option>
+
+                  {% for p in etudiant_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.etudiant %}selected{% endif %}>
+                    {{ p.nom }} {{ p.prenom }}
+                  </option>
+                  {% endfor %}
+                </select>
           </div>
           <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléphone</label>
-            <input type="text" name="telephone"
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Matière</label>
+            <select name="matiere" id="matiere"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.matiere %}selected{% endif %}>Selectionner une matière
+                  </option>
+
+                  {% for p in matiere_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.matiere %}selected{% endif %}>
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+          </div>
+
+          <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+            <input type="text" name="type"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="telephone" required />
+              placeholder="type" />
           </div>
            <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
-            <input type="text" name="motDePasse"
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure début</label>
+            <input type="time" name="heure_debut"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="mot de passe" required />
+              placeholder="heure_debut" />
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure fin</label>
+            <input type="time" name="heure_fin"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="heure_fin" />
           </div>
 
         </div>
@@ -102,29 +119,32 @@
       <!-- En-tête du tableau -->
       <thead class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wide">
         <tr>
-          <th scope="col" class="px-6 py-3">Nom</th>
-          <th scope="col" class="px-6 py-3">Prénom</th>
-          <th scope="col" class="px-6 py-3">Email</th>
-           <th scope="col" class="px-6 py-3">Téléphone</th>
-          <th scope="col" class="px-6 py-3">Date création</th>
-          <th scope="col" class="px-6 py-3">Action</th>
+          <th scope="col" class="px-6 py-3">Matiere </th>
+          <th scope="col" class="px-6 py-3">Etudiant</th>
+          <th scope="col" class="px-6 py-3">Type</th>
+          <th scope="col" class="px-6 py-3">Heure du Debut</th>
+          <th scope="col" class="px-6 py-3">Heure du Fin</th>
+          <th scope="col" class="px-6 py-3">Date d'enregistrement</th>
+           <th scope="col" class="px-6 py-3">Action</th>
         </tr>
       </thead>
 
       <!-- Corps du tableau -->
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-        {% for item in parent_liste %}   {# Boucle sur la liste des parents envoyée par la vue #}
+        {% for item in absence_liste %}   {# Boucle sur la liste des Absence envoyée par la vue #}
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
-          <!-- Colonne Nom -->
-          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.nom }}</td>
-          <!-- Colonne Prénom -->
-          <td class="px-6 py-4">{{ item.prenom }}</td>
-          <!-- Colonne Email (affiché en bleu souligné) -->
-          <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.email }}</td>
-          <td class="px-6 py-4 text-blue-600 dark:text-blue-400 underline">{{ item.telephone }}</td>
-          <!-- Colonne Date de création -->
-          <td class="px-6 py-4">{{ item.date }}</td>
-           <td class="px-4 py-3 text-center">
+          <!-- Colonne Matieret-->
+          <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.matiere_detail.nom }}</td>
+          <!-- Colonne Type-->
+          <td class="px-6 py-4">{{ item.etudiant_detail.nom }} {{ item.etudiant_detail.prenom }}</td>
+          <td class="px-6 py-4">{{ item.type}}</td>
+          <!-- Colonne HeureDebut-->
+          <td class="px-6 py-4">{{ item.heure_debut}}</td>
+          <!-- Colonne HeureFin-->
+          <td class="px-6 py-4">{{ item.heure_fin}}</td>
+          <!-- Colonne DateEnregistrement-->
+          <td class="px-6 py-4">{{ item.date_enregistrement}}</td>
+          <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-2">
           <!-- Voir (Ouvre le modal détail) -->
           <button data-modal-target="detail-modal-{{ item.id}}" data-modal-toggle="detail-modal-{{ item.id }}"
@@ -160,7 +180,79 @@
           </button>
         </div>
       </td>
-        <!-- Modal confirmation suppression -->
+        </tr>
+      <!-- Modal Détail -->
+<div id="detail-modal-{{ item.id }}" tabindex="-1"
+  class="hidden fixed inset-0 z-50 overflow-y-auto flex justify-center items-center p-4 bg-black/40">
+
+  <div class="w-full max-w-2xl h-full md:h-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl relative">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-5 bg-gray-100 dark:bg-gray-700 rounded-t-2xl border-b border-gray-200 dark:border-gray-600">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Détails de l'absence</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-300">ID #{{ item.id }}</p>
+      </div>
+      <!-- Bouton Fermer -->
+      <button type="button" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+        data-modal-toggle="detail-modal-{{ item.id }}">
+        ✖
+      </button>
+    </div>
+
+    <!-- Corps -->
+    <div class="p-6 space-y-6">
+
+      <!-- Etudiant -->
+      <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+        <h3 class="font-medium text-gray-800 dark:text-gray-200 mb-1">Étudiant</h3>
+        <p class="text-gray-700 dark:text-gray-300">{{ item.etudiant_detail.nom }} {{ item.etudiant_detail.prenom }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Classe : {{ item.etudiant.classe_detail.nom }} • Matricule : {{ item.etudiant_detail.matricule }}
+        </p>
+      </div>
+
+      <!-- Matière -->
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Matière</h4>
+        <p class="text-gray-700 dark:text-gray-300">{{ item.matiere_detail.nom }}</p>
+      </div>
+
+      <!-- Type -->
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Type</h4>
+        <p class="text-gray-700 dark:text-gray-300">{{ item.type }}</p>
+      </div>
+
+      <!-- Heures -->
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Horaires</h4>
+        <p class="text-gray-700 dark:text-gray-300">
+          {{ item.heure_debut }} → {{ item.heure_fin }}
+        </p>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Date d'enregistrement</h4>
+        <p class="text-gray-700 dark:text-gray-300">{{ item.date_enregistrement }}</p>
+      </div>
+
+    </div>
+
+    <!-- Footer avec bouton Fermer -->
+    <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-600">
+      <button type="button"
+        class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200"
+        data-modal-toggle="detail-modal-{{ item.id }}">
+        Fermer
+      </button>
+    </div>
+
+  </div>
+</div>
+
+         <!-- Modal confirmation suppression -->
     <div id="delete-modal-{{ item.id }}" tabindex="-1"
       class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
       <div class="relative p-4 w-full max-w-md max-h-full">
@@ -189,7 +281,7 @@
             </h3>
 
             <!-- Formulaire suppression -->
-            <form action="{% url 'delete_parent' item.id %}" method="post">
+            <form action="{% url 'delete_absence' item.id %}" method="post">
               {% csrf_token %}
               <button type="submit"
                 class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
@@ -205,33 +297,8 @@
         </div>
       </div>
     </div>
-          <div id="detail-modal-{{ item.id }}" tabindex="-1"
-  class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-  <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
 
-    <!-- Header -->
-    <div class="flex justify-between items-center px-4 py-3 border-b dark:border-gray-700">
-      <h2 class="text-lg font-semibold">Détail Parent</h2>
-      <button data-modal-toggle="detail-modal-{{ item.id }}">✖</button>
-    </div>
-
-    <!-- Body -->
-    <div class="p-4 space-y-2">
-      <p><b>Nom :</b> {{ item.nom }}</p>
-      <p><b>Prénom :</b> {{ item.prenom }}</p>
-      <p><b>Email :</b> {{ item.email }}</p>
-      <p><b>Téléphone :</b> {{ item.telephone }}</p>
-      <p><b>Date création :</b> {{ item.date }}</p>
-    </div>
-
-    <!-- Footer -->
-    <div class="flex justify-end p-3 border-t dark:border-gray-700">
-      <button class="px-4 py-2 bg-gray-300 rounded" data-modal-toggle="detail-modal-{{ item.id }}">Fermer</button>
-    </div>
-  </div>
-</div>
-
-          <div id="edit-modal-{{ item.id }}" tabindex="-1" aria-hidden="true"
+        <div id="edit-modal-{{ item.id }}" tabindex="-1" aria-hidden="true"
       class="hidden overflow-y-hidden overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
       <div class="relative p-4 w-full max-w-2xl h-full md:h-400 overflow-y-auto">
         <!-- Modal content -->
@@ -239,7 +306,7 @@
           <!-- Modal header -->
           <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Modification du rendez-vous
+              Modification
             </h3>
             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5
                        inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -253,43 +320,62 @@
             </button>
           </div>
           <!-- Modal body -->
-          <form method="post" action="{% url 'edit_parent' item.id %}">
+          <form method="post" action="{% url 'edit_absence' item.id %}">
             {% csrf_token %}
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
+<div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Etudiant</label>
+   <select name="etudiant" id="etudiant"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.etudiant %}selected{% endif %}>Selectionner une matière
+                  </option>
 
-            <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Non</label>
-            <input type="text" name="nom" value="{{item.nom}}"
+                  {% for p in etudiant_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.etudiant %}selected{% endif %}>
+                    {{ p.nom }} {{ p.prenom }}
+                  </option>
+                  {% endfor %}
+                </select>
+
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Matière</label>
+            <select name="matiere" id="matiere"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.matiere %}selected{% endif %}>Selectionner une matière
+                  </option>
+
+                  {% for p in matiere_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.matiere %}selected{% endif %}>
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+
+          </div>
+
+          <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+            <input type="text" name="type" value="{{item.type}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Nom" />
           </div>
            <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prenom</label>
-            <input type="text" name="prenom" value="{{item.prenom}}"
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure début</label>
+            <input type="time" name="heure_debut" value="{{item.heure_debut}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Prenom" />
+              placeholder="heure_debut" />
           </div>
-           <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="text" name="email" value="{{item.email}}"
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure fin</label>
+            <input type="time" name="heure_fin" value="{{item.heure_fin}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="email" required />
-          </div>
-              <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléphone</label>
-            <input type="text" name="telephone" value="{{item.telephone}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="téléphone" required />
-          </div>
-           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
-            <input type="text" name="motDePasse" value="{{item.motDePasse}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="mot de passe" required />
+              placeholder="heure_fin" />
           </div>
 
         </div>
-
             <br />
             <div class="mt-4 flex items-center gap-3">
               <button type="submit"
@@ -313,10 +399,8 @@
         </div>
       </div>
     </div>
-        </tr>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>
     </table>
   </div>
-
-{% endblock content %}  {# Fin du bloc content #}
+{% endblock content %}

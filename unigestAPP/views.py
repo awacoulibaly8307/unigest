@@ -246,9 +246,74 @@ def delete_etudiant(request, pk):
 def absence(request):
     menu = load_menu()
     absence_list = APIService.get_list("absences-retards")
-    return render(request,'absence.html',
+    etudiant_list = APIService.get_list("etudiants")
+    matiere_list = APIService.get_list("matieres")
+
+    auth_token = request.session.get("auth_token")
+
+    if request.method == "POST":
+        data = {
+            "etudiant": request.POST.get("etudiant"),
+            "matiere": request.POST.get("matiere"),
+            "type": request.POST.get("type"),
+            "heure_debut": request.POST.get("heure_debut"),
+            "heure_fin": request.POST.get("heure_fin")
+        }
+
+        response = APIService.create("absences-retards", data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "Ajouté avec succès")
+            print(response)
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+            print(response['error'])
+
+            # Rediriger vers la même page après le POST
+        return redirect("absences-retards")
+
+    return render(request,'absences-retards.html',
                   {
                       'menu':menu,
+                      'matiere_list':matiere_list,
+                      'etudiant_list':etudiant_list,
+                      'absence_liste': absence_list,
+                      'show_sidebar': True,
+                  })
+
+
+def edit_absence(request,pk):
+    menu = load_menu()
+    absence_list = APIService.get_list("absences-retards")
+    etudiants_list = APIService.get_list("etudiants")
+    matiere_list = APIService.get_list("matieres")
+
+    auth_token = request.session.get("auth_token")
+
+    if request.method == "POST":
+        data = {
+            "etudiant": request.POST.get("etudiant"),
+            "matiere": request.POST.get("matiere"),
+            "type": request.POST.get("type"),
+            "heure_debut": request.POST.get("heure_debut"),
+            "heure_fin": request.POST.get("heure_fin")
+        }
+
+        response = APIService.update("absences-retards",pk, data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+            # Rediriger vers la même page après le POST
+        return redirect("absences-retards")
+
+    return render(request, 'absences-retards.html',
+                  {
+                      'menu': menu,
+                      'matiere_list': matiere_list,
+                      'etudiants_list': etudiants_list,
                       'absence_liste': absence_list,
                       'show_sidebar': True,
                   })
@@ -262,7 +327,7 @@ def delete_absence(request, pk):
                 messages.success(request, "absences-retards supprimé avec succès")
         except request.exceptions.HTTPError as e:
             messages.error(request, f"Erreur : {e}")
-    return redirect("absence")
+    return redirect("absences-retards")
 
 def classe(request):
     auth_token = request.session.get('auth_token')

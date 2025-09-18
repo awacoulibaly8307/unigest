@@ -90,13 +90,12 @@ class EmploiDuTemps(models.Model):
 
 
 class AbsenceRetard(models.Model):
-
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
     type = models.CharField(max_length=20)
     heure_debut = models.TimeField()
     heure_fin = models.TimeField()
-    date_enregistrement = models.DateField()
+    date_enregistrement = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"({self.date_enregistrement})"
