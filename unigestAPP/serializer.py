@@ -67,11 +67,21 @@ class MatiereSerializer(serializers.ModelSerializer):
 
 
 class ProfesseurSerializer(serializers.ModelSerializer):
-    matieres = MatiereSerializer(many=True, read_only=True)  # liste des matières enseignées
+    matieres_detail = MatiereSerializer(source='matieres',many=True, read_only=True)
 
     class Meta:
         model = Professeur
-        fields = "__all__"
+        fields = [
+            'id',
+            'nom',
+            'prenom',
+            'telephone',
+            'email',
+            'specialite',
+            'matieres',
+            'matieres_detail'
+
+        ]
 
 
 class EvaluationSerializer(serializers.ModelSerializer):

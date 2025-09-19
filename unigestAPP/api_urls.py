@@ -44,7 +44,7 @@ urlpatterns = [
     path('evaluations/<int:pk>/', SingleEvaluationiew.as_view(), name='evaluation-detail'),
 
     # Professeurs
-    path('professeurs/', ProfesseurView.as_view(), name='professeur-list'),
+    path('professeurs/', ProfesseurView.as_view()),
     path('professeurs/<int:pk>', SingleProfessuerView.as_view(), name='professeur-detail'),
     path('professeurs/<int:pk>/delete', delete_professeur, name='delete_professeur'),
 
