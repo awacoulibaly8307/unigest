@@ -539,6 +539,42 @@ def professeur(request):
                       'show_sidebar': True,
                   })
 
+def edit_professeur(request, pk):
+    menu = load_menu()
+    professeurs_list = APIService.get_list("professeurs")
+    auth_token = request.session.get("auth_token")
+    matiere_list = APIService.get_list("matieres")
+
+    if request.method == "POST":
+        data = {
+            "nom": request.POST.get("nom"),
+            "prenom": request.POST.get("prenom"),
+            "telephone": request.POST.get("telephone"),
+            "email": request.POST.get("email"),
+            "specialite": request.POST.get("specialite"),
+            "matieres": request.POST.getlist("matieres")
+        }
+
+        prof = APIService.update("professeurs",pk, data, auth_token)
+
+
+        if "error" not in prof:
+            messages.success(request, "Modifier avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {prof['error']}")
+            print(request, f"Erreur lors de l’ajout  {prof['error']}")
+
+            # Rediriger vers la même page après le POST
+        return redirect("professeurs")
+
+    return render(request,'professeurs.html',
+                  {
+                      'menu':menu,
+                      'matiere_list':matiere_list,
+                      'professeurs_liste': professeurs_list,
+                      'show_sidebar': True,
+                  })
+
 def delete_professeur(request, pk):
     if request.method == "POST":
         token = request.session.get("auth_token")
