@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+    📋 Emploie du temps
+  </h1>
+</div>
+    <!-- Conteneur de la grille -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for item in filieres_list %}
+    <div class="max-w-sm w-full bg-white border border-gray-200 rounded-2xl shadow-md p-6
+                dark:bg-gray-800 dark:border-gray-700 transition-transform transform hover:scale-105 hover:shadow-lg">
+
+        <!-- Header avec icône et titre -->
+        <div class="flex items-center space-x-3 mb-4">
+            <div class="p-2 rounded-full bg-blue-100 dark:bg-blue-900">
+                <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 14l9-5-9-5-9 5 9 5zm0 7v-7"/>
+                </svg>
+            </div>
+            <h5 class="text-xl font-semibold text-gray-900 dark:text-white">
+                {{ item.nomfiliere }}
+            </h5>
+        </div>
+
+        <!-- Groupe -->
+        <p class="mb-3 text-gray-600 dark:text-gray-400">
+            Groupe : <span class="font-medium">{{ item.groupe }}</span>
+        </p>
+
+        <!-- Date -->
+        <p class="text-sm text-gray-400 dark:text-gray-500 mb-4">
+            Enregistré le : {{ item.DateEnregistrement }}
+        </p>
+
+        <!-- Bouton -->
+        <a href="{% url 'emploi' item.id %}"
+           class="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white
+                  bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300
+                  dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700 transition-colors">
+            Voir le détail
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}

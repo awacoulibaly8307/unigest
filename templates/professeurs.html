@@ -147,8 +147,15 @@
           <td class="px-6 py-4">{{ item.specialite}}</td>
           <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-2">
+
+             <!-- Voir étudiants -->
+        <button data-modal-target="etudiants-modal-{{ item.id }}"
+                data-modal-toggle="etudiants-modal-{{ item.id }}"
+                class="text-green-500 hover:text-green-700" title="Étudiants">
+          🎓
+        </button>
           <!-- Voir (Ouvre le modal détail) -->
-          <button data-modal-target="detail-modal-prof-{{ item.id}}" data-modal-toggle="detail-modal-prof-{{ item.id }}"
+          <button data-modal-target="detail-modal-etudiant-{{ item.id}}" data-modal-toggle="detail-modal-etudiant-{{ item.id }}"
             class="text-blue-500 hover:text-blue-700" title="Voir">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -159,6 +166,8 @@
                               7-4.478 0-8.268-2.943-9.542-7z" />
             </svg>
           </button>
+          <!-- Supprimer (ouvre modal) -->
+
           <!-- Modifier -->
           <button data-modal-target="edit-modal-{{ item.id }}" data-modal-toggle="edit-modal-{{ item.id }}"
             class="text-yellow-500 hover:text-yellow-700" title="Modifier">
@@ -168,7 +177,6 @@
                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
           </button>
-          <!-- Supprimer (ouvre modal) -->
           <button data-modal-target="delete-modal-{{ item.id }}" data-modal-toggle="delete-modal-{{ item.id }}"
             class="text-red-500 hover:text-red-700" title="Supprimer">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
@@ -230,7 +238,8 @@
     </div>
         <div id="detail-modal-prof-{{ item.id }}"
      class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-  <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+
+            <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
 
     <!-- Header -->
     <div class="flex justify-between items-center px-4 py-3 border-b dark:border-gray-700">
@@ -252,14 +261,15 @@
       </div>
 
       <div>
-        <p><b>Matières enseignées :</b></p>
-        <ul class="list-disc list-inside">
-          {% for matiere in item.matieres %}
-            <li>{{ matiere.nom }} (Coeff : {{ matiere.coefficient }})</li>
-          {% empty %}
-            <li>Aucune matière assignée</li>
-          {% endfor %}
-        </ul>
+       <p><b>Matières enseignées :</b></p>
+<ul class="list-disc list-inside">
+    {% for matiere in item.matieres_detail %}
+        <li>{{ matiere.nom }} (Coeff : {{ matiere.coefficient }})</li>
+    {% empty %}
+        <li>Aucune matière assignée</li>
+    {% endfor %}
+</ul>
+
       </div>
 
 
@@ -278,105 +288,44 @@
 </div>
 
 
-        <div id="edit-modal-{{ item.id }}" tabindex="-1" aria-hidden="true"
-      class="hidden overflow-y-hidden overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-      <div class="relative p-4 w-full max-w-2xl h-full md:h-400 overflow-y-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-          <!-- Modal header -->
-          <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Modification
-            </h3>
-            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5
-                       inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              data-modal-hide="edit-modal-{{ item.id }}">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293
-                     4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10
-                     4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-              <span class="sr-only">Fermer</span>
-            </button>
-          </div>
-          <!-- Modal body -->
-          <form method="post" action="{% url 'edit_professeur' item.id %}">
-            {% csrf_token %}
-            <div class="grid gap-4 mb-4 sm:grid-cols-2">
-
-             <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Non</label>
-            <input type="text" name="nom" value="{{item.nom}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Nom" />
-          </div>
-           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prenom</label>
-            <input type="text" name="prenom" value="{{item.prenom}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Prenom" />
-          </div>
-           <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="text" name="email" value="{{item.email}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="email" required />
-          </div>
-          <div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Téléphone</label>
-            <input type="text" name="telephone" value="{{item.telephone}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="telephone" required />
-          </div>
-<div>
-            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Spécialité</label>
-            <input type="text" name="specialite" value="{{item.specialite}}"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="Spécialité" required />
-          </div>
-          <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Matière</label>
-            <select name="matieres" id="matieres" multiple
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  required>
-                  <option value="" disabled {% if not item.matieres %}selected{% endif %}>Selectionner une matière
-                  </option>
-
-                  {% for p in matiere_list %}
-                  <option value="{{ p.id }}" {% if p.id == item.matieres %}selected{% endif %}>
-                    {{ p.nom }}
-                  </option>
-                  {% endfor %}
-                </select>
-          </div>
-
-        </div>
-
-            <br />
-            <div class="mt-4 flex items-center gap-3">
-              <button type="submit"
-                class="flex items-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"></path>
-                </svg>
-                Enregistrer
-              </button>
-              <button type="button" data-modal-hide="edit-modal-{{ item.id }}"
-                class="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200
-                         hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100
-                         dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                Annuler
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>
     </table>
+      {% for item in professeurs_liste %}
+       <!-- 🔹 Modal Étudiants -->
+  <div id="etudiants-modal-{{ item.id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+      <h3 class="text-lg font-semibold mb-3">Étudiants de {{ item.nom }} {{ item.prenom }}</h3>
+      <table class="w-full text-sm">
+        <thead>
+          <tr>
+            <th class="px-3 py-2">Matricule</th>
+            <th class="px-3 py-2">Nom</th>
+            <th class="px-3 py-2">Prénom</th>
+            <th class="px-3 py-2">Classe</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for etu in item.get_etudiants %}
+          <tr>
+            <td class="px-3 py-2">{{ etu.matricule }}</td>
+            <td class="px-3 py-2">{{ etu.nom }}</td>
+            <td class="px-3 py-2">{{ etu.prenom }}</td>
+            <td class="px-3 py-2">{{ etu.classe.nom }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="text-center py-2">Aucun étudiant trouvé</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="flex justify-end mt-4">
+        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
+                data-modal-toggle="etudiants-modal-{{ item.id }}">Fermer</button>
+      </div>
+    </div>
+  </div>
+      {% endfor %}
   </div>
 {% endblock content %}

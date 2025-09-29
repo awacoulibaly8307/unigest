@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="flex items-center mb-6">
+  <!-- Fil d’Ariane -->
+  <!-- <span class="text-gray-600 dark:text-gray-300 text-sm">
+    Patient &gt; Prescription
+  </span> -->
+  <a href="{% url 'emplois' %}" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
+    title="Retour vers filière">
+    <i class="bi bi-arrow-left-circle text-xl"></i>
+  </a>
+  <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+    <h3 class="font-medium text-gray-800 dark:text-gray-200">Filière</h3>
+    <p class="text-gray-700 dark:text-gray-300 break-all">{{ fil.nomfiliere }}</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+     Groupe : {{ fil.groupe }}
+    </p>
+  </div>
+</div>
 <div class="flex items-center justify-between mb-6">
   <h1 class="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
     📋 Emploie du temps
@@ -13,6 +30,125 @@
     </svg>
     Ajouter
   </button>
+</div>
+
+
+  <div id="defaultModal" tabindex="-1" aria-hidden="true"
+   class="hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen overflow-y-auto overflow-x-hidden md:inset-0">
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-400 overflow-y-auto">
+    <!-- Modal content -->
+    <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+      <!-- Modal header -->
+      <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Enregistrement
+        </h3>
+        <button type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-toggle="defaultModal">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <form method="post">
+        {% csrf_token %}
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Professeur</label>
+            <select name="professeur" id="professeur"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" selected disabled>Selectionner un professeur
+                  </option>
+
+                  {% for p in professeurs_list %}
+                  <option value="{{ p.id }}" >
+                    {{ p.nom }} {{ p.prenom }}
+                  </option>
+                  {% endfor %}
+                </select>
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Matière</label>
+            <select name="matiere" id="matiere"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" selected disabled>Selectionner une matière
+                  </option>
+
+                  {% for p in matieres_list %}
+                  <option value="{{ p.id }}">
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+          </div>
+
+           <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Classes</label>
+            <select name="classe" id="classe"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" selected disabled>Selectionner une classe
+                  </option>
+
+                  {% for p in classes_list %}
+                  <option value="{{ p.id }}">
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+          </div>
+           <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jours</label>
+           <select name="jour" id="jour"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              required>
+              <option value="" selected disabled>Selectionner un jour</option>
+               <option value="Lundi">Lundi</option>
+             <option value="Mardi">Mardi</option>
+             <option value="Mercredi">Mercredi</option>
+             <option value="Jeudi">Jeudi</option>
+             <option value="Vendredi">Vendredi</option>
+             <option value="Toute la semaine">Toute la semaine</option>
+            </select>
+          </div>
+           <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure début</label>
+            <input type="time" name="heure_debut"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="heure debut" />
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure fin</label>
+            <input type="time" name="heure_fin"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="heure fin" />
+          </div>
+
+        </div>
+
+        <br />
+        <button type="submit" id="defaultModalButton" data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+          class="flex items-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+          <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"></path>
+          </svg>
+          Enregistrer
+        </button>
+         <br> <br>
+      </form>
+    </div>
+  </div>
 </div>
 
   <!-- Conteneur du tableau, avec overflow-x-auto pour gérer le responsive -->
@@ -28,15 +164,15 @@
           <th scope="col" class="px-6 py-3">Matiere </th>
           <th scope="col" class="px-6 py-3">Classe</th>
           <th scope="col" class="px-6 py-3">Jour</th>
-          <th scope="col" class="px-6 py-3">Date de debut</th>
-          <th scope="col" class="px-6 py-3">Date fin</th>
+          <th scope="col" class="px-6 py-3">Heure de debut</th>
+          <th scope="col" class="px-6 py-3">Heure de fin</th>
            <th scope="col" class="px-6 py-3">Action</th>
         </tr>
       </thead>
 
       <!-- Corps du tableau -->
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-        {% for item in emploi_liste %}   {# Boucle sur la liste des emploi du temp envoyée par la vue #}
+        {% for item in emp %}   {# Boucle sur la liste des emploi du temp envoyée par la vue #}
         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200">
           <!-- Colonne matiere-->
           <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">{{ item.professeur.nom}} {{ item.professeur.prenom}}</td>
@@ -162,6 +298,130 @@
   </div>
 </div>
 
+          <div id="edit-modal-{{ item.id }}" tabindex="-1" aria-hidden="true"
+      class="hidden overflow-y-hidden overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+      <div class="relative p-4 w-full max-w-2xl h-full md:h-400 overflow-y-auto">
+        <!-- Modal content -->
+        <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+          <!-- Modal header -->
+          <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+              Modification
+            </h3>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5
+                       inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="edit-modal-{{ item.id }}">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293
+                     4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10
+                     4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="sr-only">Fermer</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <form method="post" action="{% url 'edit_emploi' item.id %}">
+            {% csrf_token %}
+            <div class="grid gap-4 mb-4 sm:grid-cols-2">
+<div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Professeur</label>
+            <select name="professeur" id="professeur"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.professeur %}selected{% endif %}>Selectionner un professeur
+                  </option>
+
+                  {% for p in professeurs_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.professeur %}selected{% endif %}>
+                    {{ p.nom }} {{ p.prenom }}
+                  </option>
+                  {% endfor %}
+                </select>
+
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Matière</label>
+            <select name="matiere" id="matiere"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.matiere %}selected{% endif %}>Selectionner une matière
+                  </option>
+
+                  {% for p in matieres_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.matiere %}selected{% endif %}>
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+
+          </div>
+
+               <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Classes</label>
+            <select name="classe" id="classe"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required>
+                  <option value="" disabled {% if not item.classe %}selected{% endif %}>Selectionner une classe
+                  </option>
+
+                  {% for p in classes_list %}
+                  <option value="{{ p.id }}" {% if p.id == item.classe %}selected{% endif %}>
+                    {{ p.nom }}
+                  </option>
+                  {% endfor %}
+                </select>
+          </div>
+           <div>
+            <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jour</label>
+           <select name="jour" id="jour"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              required>
+               <option value="" disabled {% if not item.jour %}selected{% endif %}>Selectionner un jour</option>
+              <option value="Lundi" {% if item.jour == "Lundi" %}selected{% endif %}>Lundi</option>
+              <option value="Mardi" {% if item.jour == "Mardi" %}selected{% endif %}>Mardi</option>
+              <option value="Mercredi" {% if item.jour == "Mercredi" %}selected{% endif %}>Mercredi</option>
+              <option value="Jeudi" {% if item.jour == "Jeudi" %}selected{% endif %}>Jeudi</option>
+              <option value="Vendredi" {% if item.jour == "Vendredi" %}selected{% endif %}>Vendredi</option>
+              <option value="Toute la semaine" {% if item.jour == "Toute la semaine" %}selected{% endif %}>Toute la semaine</option>
+            </select>
+          </div>
+           <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure début</label>
+            <input type="time" name="heure_debut" value="{{item.heure_debut}}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="heure debut" />
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure fin</label>
+            <input type="time" name="heure_fin" value="{{item.heure_fin}}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="heure fin" />
+          </div>
+
+        </div>
+            <br />
+            <div class="mt-4 flex items-center gap-3">
+              <button type="submit"
+                class="flex items-center gap-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                Enregistrer
+              </button>
+              <button type="button" data-modal-hide="edit-modal-{{ item.id }}"
+                class="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200
+                         hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-gray-100
+                         dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
         {% endfor %}  {# Fin de la boucle #}
       </tbody>
     </table>

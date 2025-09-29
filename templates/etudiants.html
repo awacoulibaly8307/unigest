@@ -262,7 +262,7 @@
         <p><b>Résultats :</b></p>
         <ul class="list-disc list-inside">
           {% for note in item.notes.all %}
-            <li>{{ note.matiere.nom }} : {{ note.valeur }} / 20</li>
+            <li>{{ note.matiere.nom }} : {{ note }} / 20</li>
           {% empty %}
             <li>Aucune note enregistrée</li>
           {% endfor %}

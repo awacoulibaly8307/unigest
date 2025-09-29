@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from requests.exceptions import HTTPError
 from django.http import HttpResponse
 from django.conf import settings
 import json
 import os
+
+from .models import EmploiDuTemps, Filiere
 from .service.api_service import APIService
 from django.db.models import Count,Avg,Sum
 
@@ -231,7 +233,6 @@ def edit_etudiant(request,pk):
             "show_sidebar": True,
         })
 
-
 def delete_etudiant(request, pk):
     if request.method == "POST":
         token = request.session.get("auth_token")
@@ -403,26 +404,130 @@ def delete_classe(request, pk):
             messages.error(request, f"Erreur : {e}")
     return redirect("classes")
 
-def emploi(request):
+def emplois(request):
     menu = load_menu()
-    emploi_list = APIService.get_list("emplois")
+    filieres_list = APIService.get_list("filieres")
+    print("AWA",filieres_list)
+    return render(request,'emplois.html',
+                  {
+                      'menu':menu,
+                      'filieres_list':filieres_list,
+                      'show_sidebar': True,
+                  })
+
+def emploi(request,pk):
+    menu = load_menu()
+    fil = get_object_or_404(Filiere, pk=pk)
+    filieres_list = APIService.get_list("filieres")
+    matieres_list = APIService.get_list("matieres")
+    classes_list = APIService.get_list("classes")
+    professeurs_list = APIService.get_list("professeurs")
+    auth_token = request.session.get('auth_token')
+
+    if request.method == "POST":
+        data = {
+            "filiere": fil.id,
+            "professeur": request.POST.get("professeur"),
+            "matiere": request.POST.get("matiere"),
+            "classe": request.POST.get("classe"),
+            "jour": request.POST.get("jour"),
+            "heure_debut": request.POST.get("heure_debut"),
+            "heure_fin": request.POST.get("heure_fin"),
+        }
+
+        response = APIService.create("emploi", data, auth_token)
+
+        if response and "error" not in response:
+            messages.success(request, "Ajouté avec succès")
+        elif response and "error" in response:
+            messages.error(request, f"Erreur lors de l’ajout : {response['error']}")
+        else:
+            messages.error(request, "Erreur : aucune réponse reçue du serveur.")
+
+        # Rediriger vers la même page après le POST
+        return redirect("emploi",pk = fil.id)
+
+    emp = EmploiDuTemps.objects.filter(filiere=fil.id)
+
     return render(request,'emploi.html',
                   {
                       'menu':menu,
-                      'emploi_liste': emploi_list,
+                      'fil':fil,
+                      'emp':emp,
+                      'filieres_list':filieres_list,
+                      'matieres_list':matieres_list,
+                      'classes_list':classes_list,
+                      'professeurs_list':professeurs_list,
                       'show_sidebar': True,
                   })
+
+def edit_emploi(request, emploi_id):
+    menu = load_menu()
+    emps = get_object_or_404(EmploiDuTemps, pk=emploi_id)
+    fil = emps.filiere
+
+    filieres_list = APIService.get_list("filieres")
+    matieres_list = APIService.get_list("matieres")
+    classes_list = APIService.get_list("classes")
+    professeurs_list = APIService.get_list("professeurs")
+    auth_token = request.session.get('auth_token')
+
+    if request.method == "POST":
+        data = {
+
+            "filiere": fil.id,
+            "professeur": request.POST.get("professeur"),
+            "matiere": request.POST.get("matiere"),
+            "classe": request.POST.get("classe"),
+            "jour": request.POST.get("jour"),
+            "heure_debut": request.POST.get("heure_debut"),
+            "heure_fin": request.POST.get("heure_fin"),
+        }
+
+        response = APIService.update("emploi",emploi_id, data, auth_token)
+
+        if response and "error" not in response:
+            messages.success(request, "Modifié avec succès")
+        elif response and "error" in response:
+            messages.error(request, f"Erreur lors de la modification : {response['error']}")
+        else:
+            messages.error(request, "Erreur : aucune réponse reçue du serveur.")
+
+        return redirect("emploi", pk=fil.id)
+
+    emp = EmploiDuTemps.objects.filter(filiere=fil.id)
+
+    return render(request, 'emploi_edit.html', {
+        'menu': menu,
+        'fil': fil,
+        'emp': emp,
+        'filieres_list': filieres_list,
+        'matieres_list': matieres_list,
+        'classes_list': classes_list,
+        'professeurs_list': professeurs_list,
+        'show_sidebar': True,
+    })
+
 
 def delete_emploi(request, pk):
     if request.method == "POST":
         token = request.session.get("auth_token")
         try:
-            result = APIService.delete("emplois", pk, token=token)
+            # Récupérer l'emploi pour avoir la filière
+            emploi_obj = EmploiDuTemps.objects.get(pk=pk)
+            filiere_id = emploi_obj.filiere.id
+
+            result = APIService.delete("emploi", pk, token=token)
             if result:
-                messages.success(request, "emplois supprimé avec succès")
+                messages.success(request, "Emploi supprimé avec succès")
+        except EmploiDuTemps.DoesNotExist:
+            messages.error(request, "Emploi introuvable")
         except request.exceptions.HTTPError as e:
             messages.error(request, f"Erreur : {e}")
-    return redirect("emploi")
+
+    # Rediriger vers la page de la filière
+    return redirect("emploi", pk=filiere_id)
+
 
 
 def matiere(request):
@@ -655,3 +760,15 @@ def delete_filiere(request, pk):
         except request.exceptions.HTTPError as e:
             messages.error(request, f"Erreur : {e}")
     return redirect("filieres")
+
+def evaluation(request):
+    menu = load_menu()
+
+
+    auth_token = request.session.get("auth_token")
+
+    return render(request,'evaluation.html',
+                  {
+                      'menu':menu,
+                      'show_sidebar': True,
+                  })

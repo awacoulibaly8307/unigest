@@ -94,13 +94,24 @@ class EvaluationSerializer(serializers.ModelSerializer):
 
 
 class EmploiDuTempsSerializer(serializers.ModelSerializer):
-    classe = ClasseSerializer(read_only=True)
-    matiere = MatiereSerializer(read_only=True)
-    professeur = ProfesseurSerializer(read_only=True)
+    classe_detail = ClasseSerializer(source='classe', read_only=True)
+    matiere_detail = MatiereSerializer(source='matiere', read_only=True)
+    professeur_detail = ProfesseurSerializer(source='professeur', read_only=True)
+    filiere_detail = ProfesseurSerializer(source='filiere', read_only=True)
 
     class Meta:
         model = EmploiDuTemps
-        fields = "__all__"
+        fields = [
+            'id',
+            'jour',
+            'heure_debut',
+            'heure_fin',
+            'classe_detail',
+            'matiere_detail',
+            'professeur_detail',
+            'filiere_detail',
+            'filiere', 'professeur', 'matiere', 'classe'
+        ]
 
 
 class AbsenceRetardSerializer(serializers.ModelSerializer):

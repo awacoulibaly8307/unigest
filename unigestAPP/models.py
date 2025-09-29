@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Parent(models.Model):
-   
     nom = models.CharField(max_length=255)
     prenom = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -64,6 +63,13 @@ class Professeur(models.Model):
     def __str__(self):
         return f"{self.nom} {self.prenom} - {self.specialite}"
 
+    def get_etudiants(self):
+        # Chercher toutes les classes où ce prof enseigne
+        classes = Classe.objects.filter(emplois__professeur=self).distinct()
+        # Récupérer les étudiants de ces classes
+        etudiants = Etudiant.objects.filter(classe__in=classes).distinct()
+        return etudiants
+
 
 class Evaluation(models.Model):
 
@@ -78,6 +84,7 @@ class Evaluation(models.Model):
 
 
 class EmploiDuTemps(models.Model):
+    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, related_name="emplois")
     professeur = models.ForeignKey(Professeur, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
@@ -86,7 +93,8 @@ class EmploiDuTemps(models.Model):
     heure_fin = models.TimeField()
 
     def __str__(self):
-        return f"{self.jour}"
+        return f"{self.filiere.nomfiliere} - {self.jour} {self.heure_debut}-{self.heure_fin}"
+
 
 
 class AbsenceRetard(models.Model):

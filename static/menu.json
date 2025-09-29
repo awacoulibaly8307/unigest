@@ -1,9 +1,10 @@
 [
-  {"name": "Dashboard", "url": "index", "icon": "speedometer2"},
+  {"name": "Tableau de bord", "url": "index", "icon": "speedometer2"},
   {"name": "Parent", "url": "parents", "icon": "people-fill"},
-   {"name": "Filiere", "url": "filieres", "icon": "building"},
+  {"name": "Filiere", "url": "filieres", "icon": "building"},
   {"name": "Salle", "url": "classes", "icon": "building"},
   {"name": "Etudiant", "url": "etudiants", "icon": "mortarboard-fill"},
+  {"name": "Evaluation", "url": "evaluation", "icon": "mortarboard-fill"},
   {"name": "Matiere", "url": "matieres", "icon": "book-half"},
   {"name": "Professeur", "url": "professeurs", "icon": "person-badge-fill"},
   {"name": "Emploi du temps", "url": "emplois", "icon": "calendar3"},
