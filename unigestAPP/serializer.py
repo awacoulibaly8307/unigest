@@ -97,7 +97,7 @@ class EmploiDuTempsSerializer(serializers.ModelSerializer):
     classe_detail = ClasseSerializer(source='classe', read_only=True)
     matiere_detail = MatiereSerializer(source='matiere', read_only=True)
     professeur_detail = ProfesseurSerializer(source='professeur', read_only=True)
-    filiere_detail = ProfesseurSerializer(source='filiere', read_only=True)
+    filiere_detail = FiliereSerializer(source='filiere', read_only=True)
 
     class Meta:
         model = EmploiDuTemps

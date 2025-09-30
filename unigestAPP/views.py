@@ -461,11 +461,11 @@ def emploi(request,pk):
                       'show_sidebar': True,
                   })
 
-def edit_emploi(request, emploi_id):
+def edit_emploi(request, pk):
     menu = load_menu()
-    emps = get_object_or_404(EmploiDuTemps, pk=emploi_id)
+    emps = get_object_or_404(EmploiDuTemps, pk=pk)
     fil = emps.filiere
-
+    print("filiere recup",fil)
     filieres_list = APIService.get_list("filieres")
     matieres_list = APIService.get_list("matieres")
     classes_list = APIService.get_list("classes")
@@ -474,7 +474,6 @@ def edit_emploi(request, emploi_id):
 
     if request.method == "POST":
         data = {
-
             "filiere": fil.id,
             "professeur": request.POST.get("professeur"),
             "matiere": request.POST.get("matiere"),
@@ -484,13 +483,15 @@ def edit_emploi(request, emploi_id):
             "heure_fin": request.POST.get("heure_fin"),
         }
 
-        response = APIService.update("emploi",emploi_id, data, auth_token)
+        response = APIService.update("emploi",pk, data, auth_token)
 
         if response and "error" not in response:
             messages.success(request, "Modifié avec succès")
         elif response and "error" in response:
+            print("DEBUG:", response.status_code, response.text,"filiere",fil)
             messages.error(request, f"Erreur lors de la modification : {response['error']}")
         else:
+            print("DEBUG:", response.status_code, response.text)
             messages.error(request, "Erreur : aucune réponse reçue du serveur.")
 
         return redirect("emploi", pk=fil.id)
@@ -501,6 +502,7 @@ def edit_emploi(request, emploi_id):
         'menu': menu,
         'fil': fil,
         'emp': emp,
+        'emps':emps,
         'filieres_list': filieres_list,
         'matieres_list': matieres_list,
         'classes_list': classes_list,
