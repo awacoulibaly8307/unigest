@@ -35,7 +35,7 @@ class EtudiantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Etudiant
         fields = [
-             'id',
+            'id',
             'parent',
             'parent_detail',
             'classe',
@@ -85,12 +85,21 @@ class ProfesseurSerializer(serializers.ModelSerializer):
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
-    etudiant = EtudiantSerializer(read_only=True)  # détail étudiant
-    matiere = MatiereSerializer(read_only=True)    # détail matière
+    etudiant_detail = EtudiantSerializer(source='etudiant', read_only=True)
+    matieres_detail = MatiereSerializer(source='matiere',read_only=True)
 
     class Meta:
         model = Evaluation
-        fields = "__all__"
+        fields = [
+            'id',
+            'type_evaluation',
+            'date_evaluation',
+            'note',
+            'etudiant',
+            'etudiant_detail',
+            'matiere',
+            'matieres_detail'
+        ]
 
 
 class EmploiDuTempsSerializer(serializers.ModelSerializer):

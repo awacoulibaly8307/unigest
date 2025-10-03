@@ -218,7 +218,7 @@ def edit_etudiant(request,pk):
         response = APIService.update("etudiants",pk, data, auth_token)
 
         if "error" not in response:
-            messages.success(request, " avec succès")
+            messages.success(request, "avec succès")
         else:
             messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
 
@@ -228,8 +228,8 @@ def edit_etudiant(request,pk):
     return render(request, "etudiants.html", {
             "menu": menu,
             "etudiant_list": etudiant_list,
-        "parent_list":parent_list,
-        "classe_list":classe_list,
+            "parent_list":parent_list,
+            "classe_list":classe_list,
             "show_sidebar": True,
         })
 
@@ -281,7 +281,6 @@ def absence(request):
                       'absence_liste': absence_list,
                       'show_sidebar': True,
                   })
-
 
 def edit_absence(request,pk):
     menu = load_menu()
@@ -765,12 +764,88 @@ def delete_filiere(request, pk):
 
 def evaluation(request):
     menu = load_menu()
-
-
+    matiere_list = APIService.get_list("matieres")
+    eva_list = APIService.get_list("evaluation")
+    etudiant_list = APIService.get_list("etudiants")
     auth_token = request.session.get("auth_token")
 
+    if request.method == "POST":
+        data = {
+            "etudiant": request.POST.get("etudiant"),
+            "matiere": request.POST.get("matiere"),
+            "note": request.POST.get("note"),
+            "type_evaluation": request.POST.get("type_evaluation"),
+            "date_evaluation": request.POST.get("date_evaluation")
+        }
+
+        response = APIService.create("evaluation", data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "ajouter avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+
+            # Rediriger vers la même page après le POST
+        return redirect("evaluation")
     return render(request,'evaluation.html',
                   {
                       'menu':menu,
                       'show_sidebar': True,
+                      'eva_list':eva_list,
+                       'matiere_list':matiere_list,
+                      'etudiant_list':etudiant_list
+
                   })
+
+def edit_evaluation(request,pk):
+    menu = load_menu()
+    matiere_list = APIService.get_list("matieres")
+    eva_list = APIService.get_list("evaluation")
+    etudiant_list = APIService.get_list("etudiants")
+    auth_token = request.session.get("auth_token")
+
+    if request.method == "POST":
+        data = {
+            "etudiant": request.POST.get("etudiant"),
+            "matiere": request.POST.get("matiere"),
+            "note": request.POST.get("note"),
+            "type_evaluation": request.POST.get("type_evaluation"),
+            "date_evaluation": request.POST.get("date_evaluation")
+            }
+
+        response = APIService.update("evaluation",pk, data, auth_token)
+
+        if "error" not in response:
+            messages.success(request, "modifier avec succès")
+        else:
+            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+            print(request, f"Erreur lors de l’ajout  {response['error']}")
+            # Rediriger vers la même page après le POST
+        return redirect("evaluation")
+    return render(request,'evaluation.html',
+                  {
+                      'menu':menu,
+                      'show_sidebar': True,
+                      'eva_list':eva_list,
+                      'matiere_list':matiere_list,
+                      'etudiant_list':etudiant_list
+
+                  })
+
+
+def delete_evaluation(request, pk):
+    if request.method == "POST":
+        token = request.session.get("auth_token")
+        try:
+            result = APIService.delete("evaluation", pk, token=token)
+            if result:
+                messages.success(request, "Évaluation supprimée avec succès")
+            else:
+                messages.error(request, "La suppression a échoué")
+        except request.exceptions.HTTPError as e:
+            messages.error(request, f"Erreur HTTP : {e}")
+            print(f"Erreur HTTP : {e}")
+        except Exception as e:
+            messages.error(request, f"Erreur inattendue : {e}")
+            print(f"Erreur inattendue : {e}")
+    return redirect("evaluation")

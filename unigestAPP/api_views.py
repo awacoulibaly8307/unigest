@@ -81,14 +81,14 @@ class EtudiantView(generics.ListCreateAPIView):
                    return [permission() for permission in permission_classes]
 
 
-class SingleEtudiantView(generics.RetrieveUpdateDestroyAPIView):
-            queryset = Etudiant.objects.all()
-            serializer_class = MatiereSerializer
-            def get_permissions(self):
-                permission_classes = []
-                if self.request.method not in ['GET']:
-                 permission_classes = [IsAuthenticated]
-                return [permission() for permission in permission_classes]
+class SingleEtudiantsView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Etudiant.objects.all()
+    serializer_class = EtudiantSerializer
+    def get_permissions(self):
+        permission_classes = []
+        if self.request.method not in ['GET']:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 class EvaluationView(generics.ListCreateAPIView):

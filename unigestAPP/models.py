@@ -34,7 +34,7 @@ class Etudiant(models.Model):
     dateNaissance = models.DateField()
     adresse = models.CharField(max_length=255)
     telephone = models.CharField(max_length=20)
-    email = models.EmailField(unique=True)
+    email = models.CharField(unique=True)
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
@@ -70,13 +70,11 @@ class Professeur(models.Model):
         etudiants = Etudiant.objects.filter(classe__in=classes).distinct()
         return etudiants
 
-
 class Evaluation(models.Model):
-
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
-    note = models.DecimalField(max_digits=5, decimal_places=2)  # ex: 15.50
-    type_evaluation = models.CharField(max_length=50,)
+    note = models.CharField()
+    type_evaluation = models.CharField(max_length=50)
     date_evaluation = models.DateField()
 
     def __str__(self):
@@ -94,8 +92,6 @@ class EmploiDuTemps(models.Model):
 
     def __str__(self):
         return f"{self.filiere.nomfiliere} - {self.jour} {self.heure_debut}-{self.heure_fin}"
-
-
 
 class AbsenceRetard(models.Model):
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
