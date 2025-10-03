@@ -28,7 +28,7 @@ class Etudiant(models.Model):
     classe = models.ForeignKey(Classe, on_delete=models.CASCADE)  # relation correcte
     nom = models.CharField(max_length=255)
     prenom = models.CharField(max_length=255)
-    motdepasse = models.CharField(max_length=255)
+    motdepasse = models.CharField(max_length=255, null=True, blank=True)
     sexe = models.CharField(max_length=10, choices=[("M", "Masculin"), ("F", "Féminin")])
     matricule = models.CharField(max_length=255, unique=True)
     dateNaissance = models.DateField()
@@ -60,12 +60,14 @@ class Professeur(models.Model):
     # Un professeur peut enseigner plusieurs matières
     matieres = models.ManyToManyField(Matiere, related_name="professeurs")
 
+    classes = models.ManyToManyField(Classe, related_name="classes")
+
     def __str__(self):
         return f"{self.nom} {self.prenom} - {self.specialite}"
 
     def get_etudiants(self):
         # Chercher toutes les classes où ce prof enseigne
-        classes = Classe.objects.filter(emplois__professeur=self).distinct()
+        classes = Classe.objects.filter(professeur=self).distinct()
         # Récupérer les étudiants de ces classes
         etudiants = Etudiant.objects.filter(classe__in=classes).distinct()
         return etudiants

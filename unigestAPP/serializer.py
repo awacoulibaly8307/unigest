@@ -68,6 +68,7 @@ class MatiereSerializer(serializers.ModelSerializer):
 
 class ProfesseurSerializer(serializers.ModelSerializer):
     matieres_detail = MatiereSerializer(source='matieres',many=True, read_only=True)
+    classes_detail = ClasseSerializer(source='classes', many=True, read_only=True)
 
     class Meta:
         model = Professeur
@@ -79,8 +80,9 @@ class ProfesseurSerializer(serializers.ModelSerializer):
             'email',
             'specialite',
             'matieres',
-            'matieres_detail'
-
+            'matieres_detail',
+            'classes',
+            'classes_detail'
         ]
 
 

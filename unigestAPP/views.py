@@ -206,7 +206,6 @@ def edit_etudiant(request,pk):
             "classe": request.POST.get("classe"),
             "nom": request.POST.get("nom"),
             "prenom": request.POST.get("prenom"),
-            "motdepasse": request.POST.get("prenom"),
             "sexe": request.POST.get("sexe"),
             "matricule": request.POST.get("matricule"),
             "dateNaissance": request.POST.get("dateNaissance"),
@@ -614,6 +613,7 @@ def professeur(request):
     professeurs_list = APIService.get_list("professeurs")
     auth_token = request.session.get("auth_token")
     matiere_list = APIService.get_list("matieres")
+    classe_list = APIService.get_list("classes")
 
     if request.method == "POST":
         data = {
@@ -622,7 +622,8 @@ def professeur(request):
             "telephone": request.POST.get("telephone"),
             "email": request.POST.get("email"),
             "specialite": request.POST.get("specialite"),
-            "matieres": request.POST.getlist("matieres")
+            "matieres": request.POST.getlist("matieres"),
+            "classes": request.POST.getlist("classes")
         }
 
         prof = APIService.create("professeurs", data, auth_token)
@@ -641,6 +642,7 @@ def professeur(request):
                   {
                       'menu':menu,
                       'matiere_list':matiere_list,
+                      'classe_list':classe_list,
                       'professeurs_liste': professeurs_list,
                       'show_sidebar': True,
                   })
@@ -650,6 +652,8 @@ def edit_professeur(request, pk):
     professeurs_list = APIService.get_list("professeurs")
     auth_token = request.session.get("auth_token")
     matiere_list = APIService.get_list("matieres")
+    classe_list = APIService.get_list("classes")
+
 
     if request.method == "POST":
         data = {
@@ -658,7 +662,8 @@ def edit_professeur(request, pk):
             "telephone": request.POST.get("telephone"),
             "email": request.POST.get("email"),
             "specialite": request.POST.get("specialite"),
-            "matieres": request.POST.getlist("matieres")
+            "matieres": request.POST.getlist("matieres"),
+            "classes": request.POST.getlist("classes")
         }
 
         prof = APIService.update("professeurs",pk, data, auth_token)
@@ -677,6 +682,7 @@ def edit_professeur(request, pk):
                   {
                       'menu':menu,
                       'matiere_list':matiere_list,
+                      'classe_list':classe_list,
                       'professeurs_liste': professeurs_list,
                       'show_sidebar': True,
                   })
