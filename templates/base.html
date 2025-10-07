@@ -1,4 +1,5 @@
-{% load static %} {% load compress %}
+{% load static %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,11 +10,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniGest</title>
 
-    <!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+   <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
 
+    <!-- Tailwind CSS depuis ton build local -->
+    {% compress css %}
+    <link href="{% static 'src/output.css' %}" rel="stylesheet" />
+    {% endcompress %}
 
- <!-- Flowbite CSS (une seule version) -->
+    <!-- Flowbite CSS (une seule version) -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.4.1/flowbite.min.css"
       rel="stylesheet"
@@ -25,10 +33,6 @@
       href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
     />
 
-    {% compress css %}
-    <link href="{% static 'src/output.css' %}" rel="stylesheet" />
-    {% endcompress %}
-
 </head>
 
 <body class="bg-green-50">
@@ -37,12 +41,38 @@
 
     <div class="flex-1 p-6 {% if not disable_sidebar_mt %}mt-14{% endif %} {% if not disable_sidebar_margin %}sm:ml-64{% endif %}">{% block content %}{% endblock %}</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-<!-- Tes scripts locaux -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.4.1/flowbite.min.js" ></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Tes scripts locaux -->
   <script src="{% static 'js/export-table.js' %}" defer></script>
   <script src="{% static 'js/modal-button.js' %}" defer></script>
   <script src="{% static 'js/toggle.js' %}" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+  <script src="{% static 'js/canvasjs.min.js' %}"></script>
+
+<!-- Chart Example -->
+  <script>
+    const ctx = document.getElementById('etuChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Juin', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Etudiant',
+          data: {{ etu_per_month|safe }},
+          backgroundColor: '#3B82F6'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+  </script>
+
+
 </body>
 
 </html>

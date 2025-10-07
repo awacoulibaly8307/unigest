@@ -1,3 +1,4 @@
+from django.db.models.functions import ExtractMonth
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from requests.exceptions import HTTPError
@@ -6,7 +7,7 @@ from django.conf import settings
 import json
 import os
 
-from .models import EmploiDuTemps, Filiere
+from .models import EmploiDuTemps, Filiere, Etudiant, Evaluation, Professeur, Matiere, Parent
 from .service.api_service import APIService
 from django.db.models import Count,Avg,Sum
 
@@ -33,13 +34,23 @@ def index(request):
             count = 0
         item["num"] = count
 
-    return render(request,'index.html',
-                  {
-                      'menu':menu,
-                      'hori':hori,
-                      'show_sidebar': True,
-                  }
-    )
+    # Étudiants inscrits par mois
+    etu_per_month = (Etudiant.objects
+                               .annotate(month=ExtractMonth('date'))
+                               .values('month')
+                               .annotate(count=Count('id'))
+                               .order_by('month'))
+    months = [0] * 12
+    for entry in etu_per_month:
+        months[entry['month'] - 1] = entry['count']
+
+
+    return render(request, 'index.html', {
+        'menu': menu,
+        'hori': hori,
+        'etu_per_month': months,
+        'show_sidebar': True,
+    })
 
 def home(request):
     # Si l'utilisateur est déjà connecté → redirection automatique
@@ -615,6 +626,7 @@ def professeur(request):
     matiere_list = APIService.get_list("matieres")
     classe_list = APIService.get_list("classes")
 
+
     if request.method == "POST":
         data = {
             "nom": request.POST.get("nom"),
@@ -627,7 +639,6 @@ def professeur(request):
         }
 
         prof = APIService.create("professeurs", data, auth_token)
-
 
         if "error" not in prof:
             messages.success(request, "Ajouté avec succès")

@@ -35,6 +35,7 @@ class Etudiant(models.Model):
     adresse = models.CharField(max_length=255)
     telephone = models.CharField(max_length=20)
     email = models.CharField(unique=True)
+    date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
@@ -66,11 +67,9 @@ class Professeur(models.Model):
         return f"{self.nom} {self.prenom} - {self.specialite}"
 
     def get_etudiants(self):
-        # Chercher toutes les classes où ce prof enseigne
-        classes = Classe.objects.filter(professeur=self).distinct()
-        # Récupérer les étudiants de ces classes
-        etudiants = Etudiant.objects.filter(classe__in=classes).distinct()
-        return etudiants
+        classes = self.classes.all()
+        return Etudiant.objects.filter(classe__in=classes).distinct()
+
 
 class Evaluation(models.Model):
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE)
