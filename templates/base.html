@@ -33,6 +33,7 @@
       href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
     />
 
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 </head>
 
 <body class="bg-green-50">
@@ -49,7 +50,7 @@
   <script src="{% static 'js/export-table.js' %}" defer></script>
   <script src="{% static 'js/modal-button.js' %}" defer></script>
   <script src="{% static 'js/toggle.js' %}" defer></script>
-  <script src="{% static 'js/canvasjs.min.js' %}"></script>
+    <script src="{% static 'js/chartjs' %}" defer></script>
 
 <!-- Chart Example -->
   <script>
@@ -72,7 +73,25 @@
 
   </script>
 
-
+    <script>
+        window.onload = function () {
+    // --- Graphique Patients ---
+    var etuChart = new CanvasJS.Chart("chartEtu", {
+        exportEnabled: true,
+        animationEnabled: true,
+        data: [{
+            type: "pie",
+            yValueFormatString: "#,##0\"%\"",
+            indexLabel: "{label} ({y})",
+            dataPoints: window.sexData  // injecté par Django
+        }]
+    });
+    etuChart.render();
+};
+    </script>
+  <script>
+    window.sexData = {{ sex_data|safe }};
+</script>
 </body>
 
 </html>

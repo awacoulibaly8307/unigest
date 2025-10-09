@@ -23,6 +23,16 @@ def load_hor():
     with open(menu_file, 'r') as f:
         return json.load(f)
 
+def etudiant_per_sexe():
+    qs_sex = Etudiant.objects.values("sexe").annotate(count=Count("id"))
+    sex_counts_map = {row["sexe"]: row["count"] for row in qs_sex}
+    sex_labels = [label for (code, label) in Etudiant._meta.get_field("sexe").choices]
+    sex_counts = [sex_counts_map.get(code, 0) for (code, _) in Etudiant._meta.get_field("sexe").choices]
+    return {
+        'sex_labels': sex_labels,
+        'sex_counts': sex_counts
+    }
+
 def index(request):
     menu = load_menu()
     hori = load_hor()
@@ -34,6 +44,7 @@ def index(request):
             count = 0
         item["num"] = count
 
+
     # Étudiants inscrits par mois
     etu_per_month = (Etudiant.objects
                                .annotate(month=ExtractMonth('date'))
@@ -44,10 +55,15 @@ def index(request):
     for entry in etu_per_month:
         months[entry['month'] - 1] = entry['count']
 
+    etudiant_per = etudiant_per_sexe()
+
+    sex_data = [{"y": count, "label": label} for label, count in
+                zip(etudiant_per['sex_labels'], etudiant_per['sex_counts'])]
 
     return render(request, 'index.html', {
         'menu': menu,
         'hori': hori,
+        'sex_data':sex_data,
         'etu_per_month': months,
         'show_sidebar': True,
     })
