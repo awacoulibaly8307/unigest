@@ -133,6 +133,21 @@ def parent(request):
         }
     )
 
+def liste_etudiants_classe(request, pk):
+    menu = load_menu()
+    parent_list = APIService.get_list("parents")
+    parent = Parent.objects.get(id=pk)
+    etudiants = Etudiant.objects.filter(
+        classe__in=Etudiant.objects.filter(parent=parent).values_list('classe', flat=True)
+    )
+    return render(request, 'parents.html', {
+        'etudiants': etudiants,
+        "menu": menu,
+        "parent_liste": parent_list,
+        "show_sidebar": True,
+
+    })
+
 def edit_parent(request, pk):
     menu = load_menu()
     auth_token = request.session.get('auth_token')
