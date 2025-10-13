@@ -366,7 +366,7 @@
           <form method="post" action="{% url 'edit_etudiant' item.id %}">
             {% csrf_token %}
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
-          <div>
+            <div>
             <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
             <input type="text" name="nom" value="{{item.nom}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -383,10 +383,9 @@
             <select name="sexe" id="sexe"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               required>
-              <option value="" {% if not item.sexe %}selected{% endif %} disabled>Selectionner le sexe</option>
-                <option value="M" {% if item.sexe == 'M' %}selected{% endif %}>Homme</option>
-                <option value="F" {% if item.sexe == 'F' %}selected{% endif %}>Femme</option>
-
+              <option value="" selected disabled>Selectionner le sexe</option>
+               <option value="M" {% if item.sexe == 'M' %}selected{% endif %}>Homme</option>
+              <option value="F" {% if item.sexe == 'F' %}selected{% endif %}>Femme</option>
             </select>
           </div>
           <div>
@@ -397,7 +396,7 @@
           </div>
           <div>
             <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date de naissance</label>
-            <input type="date" name="dateNaissance" value="{{item.dateNaissance}}"
+            <input type="date" name="dateNaissance" value="{{ item.dateNaissance }}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="Date Naissance" />
           </div>
@@ -422,10 +421,10 @@
           </div>
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Parent</label>
-             <select name="parent" id="parent"
+            <select name="parent" id="parent"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required>
-                  <option value="" disabled {% if not item.parent %}selected{% endif %}>Selectionner un parent
+                  <option value="" disabled {% if not item.parent %}selected{% endif %}>Selectionner un prent
                   </option>
 
                   {% for p in parent_list %}
@@ -438,7 +437,7 @@
 
            <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Classe</label>
-             <select name="classe" id="classe"
+            <select name="classe" id="classe"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required>
                   <option value="" disabled {% if not item.classe %}selected{% endif %}>Selectionner une classe
@@ -446,7 +445,7 @@
 
                   {% for p in classe_list %}
                   <option value="{{ p.id }}" {% if p.id == item.classe %}selected{% endif %}>
-                    {{ p.nom }}
+                    {{ p.nom }} - {{ p.annee_universitaire }}
                   </option>
                   {% endfor %}
                 </select>

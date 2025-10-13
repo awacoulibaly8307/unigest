@@ -35,9 +35,9 @@ urlpatterns = [
 
     # Étudiants
     path('etudiants/', EtudiantView.as_view()),
-    path('etudiants/<int:pk>/', SingleEtudiantsView.as_view()),
+    path('etudiants/<int:pk>', SingleEtudiantsView.as_view()),
     path('etudiants/<int:pk>/delete', delete_etudiant, name='delete_etudiant'),
-    path('etudiants/<int:pk>/edit/', edit_etudiant, name='edit_etudiant'),
+    path('etudiants/<int:pk>/edit', edit_etudiant, name='edit_etudiant'),
 
     # Évaluations
     path('evaluation/', EvaluationView.as_view()),

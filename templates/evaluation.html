@@ -80,6 +80,7 @@
               required>
               <option value="" selected disabled>Selectionner un type </option>
                <option value="Examen">Examen</option>
+               <option value="Interrogation">Interrogation</option>
               <option value="Devoir">Devoir</option>
               <option value="TD">Travaux dirigé</option>
               <option value="TP">Travaux pratique</option>
@@ -362,6 +363,7 @@
               <option value="" selected disabled>Selectionner un type </option>
                <option value="Examen" {% if item.type_evaluation == "Examen" %}selected{% endif %}>Examen</option>
               <option value="Devoir" {% if item.type_evaluation == "Devoir" %}selected{% endif %}>Devoir</option>
+                <option value="Interrogation" {% if item.type_evaluation == "Interrogation" %}selected{% endif %}>Interrogation</option>
               <option value="TD" {% if item.type_evaluation == "TD" %}selected{% endif %}>Travaux dirigé</option>
               <option value="TP" {% if item.type_evaluation == "TP" %}selected{% endif %}>Travaux pratique</option>
             </select>

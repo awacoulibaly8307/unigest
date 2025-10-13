@@ -15,12 +15,12 @@ from django.db.models import Count,Avg,Sum
 
 def load_menu():
     menu_file = os.path.join(settings.BASE_DIR,  'static', 'menu.json')
-    with open(menu_file, 'r') as f:
+    with open(menu_file, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def load_hor():
     menu_file = os.path.join(settings.BASE_DIR,  'static', 'horizontal.json')
-    with open(menu_file, 'r') as f:
+    with open(menu_file, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def etudiant_per_sexe():
@@ -190,7 +190,7 @@ def etudiant(request):
             "classe": request.POST.get("classe"),
             "nom": request.POST.get("nom"),
             "prenom": request.POST.get("prenom"),
-            "motdepasse": request.POST.get("prenom"),
+            "motdepasse": request.POST.get("motdepasse") or "",
             "sexe": request.POST.get("sexe"),
             "matricule": request.POST.get("matricule"),
             "dateNaissance": request.POST.get("dateNaissance"),
@@ -219,15 +219,16 @@ def etudiant(request):
             "show_sidebar": True,
         })
 
-def edit_etudiant(request,pk):
+def edit_etudiant(request, pk):
     menu = load_menu()
     etudiant_list = APIService.get_list("etudiants")
     parent_list = APIService.get_list("parents")
     classe_list = APIService.get_list("classes")
 
-    auth_token = request.session.get('auth_token')
+    auth_token = request.session.get("auth_token")
 
     if request.method == "POST":
+        # On construit les données à envoyer à l’API
         data = {
             "parent": request.POST.get("parent"),
             "classe": request.POST.get("classe"),
@@ -238,26 +239,35 @@ def edit_etudiant(request,pk):
             "dateNaissance": request.POST.get("dateNaissance"),
             "adresse": request.POST.get("adresse"),
             "telephone": request.POST.get("telephone"),
-            "email": request.POST.get("email")
+            "email": request.POST.get("email"),
         }
 
-        response = APIService.update("etudiants",pk, data, auth_token)
+        # Si le champ mot de passe est rempli, on l’ajoute
+        motdepasse = request.POST.get("motdepasse")
+        if motdepasse:
+            data["motdepasse"] = motdepasse
 
-        if "error" not in response:
-            messages.success(request, "avec succès")
-        else:
-            messages.error(request, f"Erreur lors de l’ajout  {response['error']}")
+        # Vérifier que les champs obligatoires sont présents
+        if not data["parent"] or not data["classe"]:
+            print(request, "Veuillez sélectionner un parent et une classe.")
+            return redirect("etudiants")
 
-        # Rediriger vers la même page après le POST
+        try:
+            response = APIService.update("etudiants", pk, data, auth_token)
+            messages.success(request, "Étudiant modifié avec succès.")
+        except Exception as e:
+            print(request, f"Erreur lors de la modification : {e}")
+
         return redirect("etudiants")
 
     return render(request, "etudiants.html", {
-            "menu": menu,
-            "etudiant_list": etudiant_list,
-            "parent_list":parent_list,
-            "classe_list":classe_list,
-            "show_sidebar": True,
-        })
+        "menu": menu,
+        "etudiant_list": etudiant_list,
+        "parent_list": parent_list,
+        "classe_list": classe_list,
+        "show_sidebar": True,
+    })
+
 
 def delete_etudiant(request, pk):
     if request.method == "POST":
@@ -535,7 +545,6 @@ def edit_emploi(request, pk):
         'show_sidebar': True,
     })
 
-
 def delete_emploi(request, pk):
     if request.method == "POST":
         token = request.session.get("auth_token")
@@ -554,8 +563,6 @@ def delete_emploi(request, pk):
 
     # Rediriger vers la page de la filière
     return redirect("emploi", pk=filiere_id)
-
-
 
 def matiere(request):
     matiere_list = APIService.get_list("matieres")
@@ -589,7 +596,6 @@ def matiere(request):
                       'filiere_list':filiere_list,
                       'show_sidebar': True,
                   })
-
 
 def edit_matiere(request,pk):
     matiere_list = APIService.get_list("matieres")
@@ -641,7 +647,6 @@ def professeur(request):
     auth_token = request.session.get("auth_token")
     matiere_list = APIService.get_list("matieres")
     classe_list = APIService.get_list("classes")
-
 
     if request.method == "POST":
         data = {
