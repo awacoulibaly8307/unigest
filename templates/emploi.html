@@ -181,9 +181,9 @@
             <td class="px-6 py-4">{{ item.classe.nom }}</td>
           <td class="px-6 py-4">{{ item.jour }}</td>
           <!-- Colonne datedebut -->
-          <td class="px-6 py-4">{{ item.heure_debut }}</td>
+          <td class="px-6 py-4">{{ item.heure_debut|time:'H:i' }}</td>
           <!-- Colonne datefin -->
-          <td class="px-6 py-4">{{ item.heure_fin }}</td>
+          <td class="px-6 py-4">{{ item.heure_fin|time:'H:i' }}</td>
           <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-2">
           <!-- Voir (Ouvre le modal détail) -->
@@ -285,7 +285,7 @@
       <p><b>Professeur :</b> {{ item.professeur.nom }} {{ item.professeur.prenom }}</p>
       <p><b>Spécialité :</b> {{ item.professeur.specialite }}</p>
       <p><b>Jour :</b> {{ item.jour }}</p>
-      <p><b>Heure :</b> {{ item.heure_debut }} - {{ item.heure_fin }}</p>
+      <p><b>Heure :</b> {{ item.heure_debut|time:'H:i'  }} - {{ item.heure_fin|time:'H:i'  }}</p>
     </div>
 
     <!-- Footer -->
@@ -387,13 +387,13 @@
           </div>
            <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure début</label>
-            <input type="time" name="heure_debut" value="{{item.heure_debut}}"
+            <input type="time" name="heure_debut" value="{{item.heure_debut|time:'H:i'}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="heure debut" />
           </div>
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">heure fin</label>
-            <input type="time" name="heure_fin" value="{{item.heure_fin}}"
+            <input type="time" name="heure_fin" value="{{item.heure_fin|time:'H:i'}}"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               placeholder="heure fin" />
           </div>
