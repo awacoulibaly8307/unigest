@@ -66,6 +66,7 @@ class Professeur(models.Model):
     def __str__(self):
         return f"{self.nom} {self.prenom} - {self.specialite}"
 
+    @property
     def get_etudiants(self):
         classes = self.classes.all()
         return Etudiant.objects.filter(classe__in=classes).distinct()

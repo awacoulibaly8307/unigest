@@ -67,8 +67,9 @@ class MatiereSerializer(serializers.ModelSerializer):
 
 
 class ProfesseurSerializer(serializers.ModelSerializer):
-    matieres_detail = MatiereSerializer(source='matieres',many=True, read_only=True)
+    matieres_detail = MatiereSerializer(source='matieres', many=True, read_only=True)
     classes_detail = ClasseSerializer(source='classes', many=True, read_only=True)
+    etudiants_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = Professeur
@@ -82,9 +83,13 @@ class ProfesseurSerializer(serializers.ModelSerializer):
             'matieres',
             'matieres_detail',
             'classes',
-            'classes_detail'
+            'classes_detail',
+            'etudiants_detail',  # ✅ AJOUT MANQUANT
         ]
 
+    def get_etudiants_detail(self, obj):
+        etudiants = Etudiant.objects.filter(classe__in=obj.classes.all()).distinct()
+        return EtudiantSerializer(etudiants, many=True).data
 
 class EvaluationSerializer(serializers.ModelSerializer):
     etudiant_detail = EtudiantSerializer(source='etudiant', read_only=True)
