@@ -431,40 +431,78 @@
     </table>
 
       {% for item in professeurs_liste %}
-  <div id="etudiants-modal-{{ item.id }}" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-    <div class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-      <h3 class="text-lg font-semibold mb-3">Étudiants de {{ item.nom }} {{ item.prenom }}</h3>
-      <table class="w-full text-sm">
-        <thead>
-          <tr>
-            <th class="px-3 py-2">Matricule</th>
-            <th class="px-3 py-2">Nom</th>
-            <th class="px-3 py-2">Prénom</th>
-            <th class="px-3 py-2">Classe</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for etu in item.etudiants_detail %}
-          <tr>
-            <td class="px-3 py-2">{{ etu.matricule }}</td>
-            <td class="px-3 py-2">{{ etu.nom }}</td>
-            <td class="px-3 py-2">{{ etu.prenom }}</td>
-            <td class="px-3 py-2">{{ etu.classe_detail.nom }}</td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="4" class="text-center py-2">Aucun étudiant trouvé</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="flex justify-end mt-4">
-        <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg"
-                data-modal-toggle="etudiants-modal-{{ item.id }}">Fermer</button>
+  <div id="etudiants-modal-{{ item.id }}"
+       class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+
+      <!-- En-tête -->
+      <div class="bg-white-600 text-black px-6 py-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-black font-semibold">
+            Étudiants de {{ item.nom }} {{ item.prenom }}
+          </h3>
+          <p class="text-sm text-black">
+            Spécialité : {{ item.specialite }} |
+            Classes :
+            {% for c in item.classes_detail %}
+              <span class="bg-blue-800/60 rounded-lg px-2 py-0.5 text-xs">{{ c.nom }}</span>
+            {% empty %}
+              Aucune classe
+            {% endfor %}
+          </p>
+        </div>
+        <button data-modal-toggle="etudiants-modal-{{ item.id }}"
+                class="text-white hover:text-gray-200 transition"
+                title="Fermer">
+          ✖
+        </button>
       </div>
+
+      <!-- Corps -->
+      <div class="p-6 max-h-[70vh] overflow-y-auto">
+        {% if item.etudiants_detail %}
+        <table class="w-full border-collapse text-sm">
+          <thead class="bg-gray-100 dark:bg-gray-800 uppercase text-xs text-gray-600 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-3 text-left">Matricule</th>
+              <th class="px-4 py-3 text-left">Nom</th>
+              <th class="px-4 py-3 text-left">Prénom</th>
+              <th class="px-4 py-3 text-left">Classe</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for etu in item.etudiants_detail %}
+            <tr class="hover:bg-blue-50 dark:hover:bg-gray-700 transition">
+              <td class="px-4 py-2 font-semibold text-gray-800 dark:text-gray-200">{{ etu.matricule }}</td>
+              <td class="px-4 py-2">{{ etu.nom }}</td>
+              <td class="px-4 py-2">{{ etu.prenom }}</td>
+              <td class="px-4 py-2">{{ etu.classe_detail.nom }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="text-center py-10 text-gray-500 dark:text-gray-400">
+          Aucun étudiant trouvé pour ce professeur 😕
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Pied -->
+      <div class="bg-gray-50 dark:bg-gray-800 px-6 py-3 flex justify-between items-center">
+        <span class="text-sm text-gray-600 dark:text-gray-400">
+          Total : {{ item.etudiants_detail|length }} étudiant{{ item.etudiants_detail|length|pluralize }}
+        </span>
+        <button data-modal-toggle="etudiants-modal-{{ item.id }}"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          Fermer
+        </button>
+      </div>
+
     </div>
   </div>
-  {% endfor %}
+{% endfor %}
+
 
   </div>
 {% endblock content %}
