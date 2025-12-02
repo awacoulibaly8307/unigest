@@ -6,13 +6,14 @@ from django.http import HttpResponse
 from django.conf import settings
 import json
 import os
-
+import uuid
 from .models import EmploiDuTemps, Filiere, Etudiant, Evaluation, Professeur, Matiere, Parent
 from .service.api_service import APIService
 from django.db.models import Count,Avg,Sum
+from datetime import datetime,  date, timedelta
+import calendar
 
 # Create your views here.
-
 def load_menu():
     menu_file = os.path.join(settings.BASE_DIR,  'static', 'menu.json')
     with open(menu_file, 'r', encoding='utf-8') as f:
@@ -191,6 +192,11 @@ def delete_parent(request, pk):
             messages.error(request, f"Erreur : {e}")
     return redirect("parents")
 
+def generer_matricule():
+    annee = datetime.now().year
+    code_unique = str(uuid.uuid4().int)[:4]
+    return f"ETU{annee}-{code_unique}"
+
 def etudiant(request):
     menu = load_menu()
     etudiant_list = APIService.get_list("etudiants")
@@ -198,6 +204,7 @@ def etudiant(request):
     classe_list = APIService.get_list("classes")
 
     auth_token = request.session.get('auth_token')
+
 
     if request.method == "POST":
         data = {
@@ -207,7 +214,7 @@ def etudiant(request):
             "prenom": request.POST.get("prenom"),
             "motdepasse": request.POST.get("motdepasse") or "",
             "sexe": request.POST.get("sexe"),
-            "matricule": request.POST.get("matricule"),
+            "matricule": generer_matricule(),
             "dateNaissance": request.POST.get("dateNaissance"),
             "adresse": request.POST.get("adresse"),
             "telephone": request.POST.get("telephone"),
@@ -250,7 +257,6 @@ def edit_etudiant(request, pk):
             "nom": request.POST.get("nom"),
             "prenom": request.POST.get("prenom"),
             "sexe": request.POST.get("sexe"),
-            "matricule": request.POST.get("matricule"),
             "dateNaissance": request.POST.get("dateNaissance"),
             "adresse": request.POST.get("adresse"),
             "telephone": request.POST.get("telephone"),
@@ -309,7 +315,8 @@ def absence(request):
             "matiere": request.POST.get("matiere"),
             "type": request.POST.get("type"),
             "heure_debut": request.POST.get("heure_debut"),
-            "heure_fin": request.POST.get("heure_fin")
+            "heure_fin": request.POST.get("heure_fin"),
+            "motif": request.POST.get("motif")
         }
 
         response = APIService.create("absences-retards", data, auth_token)
@@ -465,15 +472,92 @@ def emplois(request):
                       'show_sidebar': True,
                   })
 
-def emploi(request,pk):
+def time_to_datetime(t):
+    return datetime.combine(datetime.today(), t)
+
+def round_to_30_minutes(dt):
+    return dt.replace(minute=(dt.minute // 30) * 30, second=0, microsecond=0)
+
+def genere_heures(emp):
+    heures_set = set()
+
+    for item in emp:
+        # Convertit en datetime
+        debut_dt = time_to_datetime(item.heure_debut)
+        fin_dt = time_to_datetime(item.heure_fin)
+
+        # Arrondit
+        debut_dt = round_to_30_minutes(debut_dt)
+        fin_dt = round_to_30_minutes(fin_dt)
+
+        # Parcours chaque tranche de 30 min
+        current = debut_dt
+        while current <= fin_dt:
+            heures_set.add(current.strftime("%H:%M"))
+            current += timedelta(minutes=30)
+
+    heures = sorted(list(heures_set))
+    return heures
+
+def construire_calendrier(mois, annee, donnees):
+    cal = calendar.Calendar(firstweekday=0)  # 0 = lundi
+
+    # Liste des dates à afficher (inclut les dates hors mois pour compléter la grille)
+    jours = list(cal.itermonthdates(annee, mois))
+
+    # Conversion nom du jour → numéro du jour (Lundi=0, Mardi=1, ...)
+    mapping_jours = {
+        "Lundi": 0, "Mardi": 1, "Mercredi": 2,
+        "Jeudi": 3, "Vendredi": 4, "Samedi": 5, "Dimanche": 6
+    }
+
+    events_by_date = {}
+
+    for item in donnees:
+        jour_nom = item["jour"]
+
+        # Jour de la semaine du 1er du mois
+        premier_jour = datetime(annee, mois, 1).weekday()
+
+        # Trouver le premier jour correspondant dans le mois (ex: premier lundi)
+        decalage = (mapping_jours[jour_nom] - premier_jour) % 7
+        jour_numero = 1 + decalage
+
+        date_event = date(annee, mois, jour_numero)
+
+        if date_event not in events_by_date:
+            events_by_date[date_event] = []
+
+        events_by_date[date_event].append({
+            "titre": item["matiere_detail"]["nom"],
+            "heure": f"{item['heure_debut'][:5]} - {item['heure_fin'][:5]}",
+            "prof": f"{item['professeur_detail']['nom']} {item['professeur_detail']['prenom']}",
+            "classe": item["classe_detail"]["nom"],
+        })
+
+    # Construire structure exploitable dans le template
+    calendrier = []
+    for j in jours:
+        calendrier.append({
+            "date": j,
+            "dans_mois": j.month == mois,
+            "events": events_by_date.get(j, []),
+        })
+
+    return calendrier
+
+
+def emploi(request, pk):
     menu = load_menu()
     fil = get_object_or_404(Filiere, pk=pk)
+
     filieres_list = APIService.get_list("filieres")
     matieres_list = APIService.get_list("matieres")
     classes_list = APIService.get_list("classes")
     professeurs_list = APIService.get_list("professeurs")
     auth_token = request.session.get('auth_token')
 
+    # === AJOUT EMPLOI ===
     if request.method == "POST":
         data = {
             "filiere": fil.id,
@@ -494,22 +578,45 @@ def emploi(request,pk):
         else:
             messages.error(request, "Erreur : aucune réponse reçue du serveur.")
 
-        # Rediriger vers la même page après le POST
-        return redirect("emploi",pk = fil.id)
+        return redirect("emploi", pk=fil.id)
 
+    # === LISTE EMPLOIS ===
     emp = EmploiDuTemps.objects.filter(filiere=fil.id)
 
-    return render(request,'emploi.html',
-                  {
-                      'menu':menu,
-                      'fil':fil,
-                      'emp':emp,
-                      'filieres_list':filieres_list,
-                      'matieres_list':matieres_list,
-                      'classes_list':classes_list,
-                      'professeurs_list':professeurs_list,
-                      'show_sidebar': True,
-                  })
+    # === PARAMÈTRES DU CALENDRIER ===
+    mois = 12     # 👉 tu peux rendre dynamique plus tard
+    annee = 2025
+
+    # Conversion Queryset → données compatibles
+    emp_dict = [
+        {
+            "jour": e.jour,
+            "heure_debut": str(e.heure_debut),
+            "heure_fin": str(e.heure_fin),
+            "matiere_detail": {"nom": e.matiere.nom},
+            "professeur_detail": {"nom": e.professeur.nom, "prenom": e.professeur.prenom},
+            "classe_detail": {"nom": e.classe.nom},
+        }
+        for e in emp
+    ]
+    jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"]
+
+    calendrier = construire_calendrier(mois, annee, emp_dict)
+
+    return render(request, 'emploi.html', {
+        'menu': menu,
+        'fil': fil,
+        'emp': emp,
+        'filieres_list': filieres_list,
+        'matieres_list': matieres_list,
+        'classes_list': classes_list,
+        'professeurs_list': professeurs_list,
+        'calendrier': calendrier,
+        'jours':jours,
+        'mois': mois,
+        'annee': annee,
+        'show_sidebar': True,
+    })
 
 def edit_emploi(request, pk):
     menu = load_menu()
