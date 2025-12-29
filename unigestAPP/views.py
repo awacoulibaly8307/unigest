@@ -500,12 +500,9 @@ def genere_heures(emp):
     return heures
 
 def construire_calendrier(mois, annee, donnees):
-    cal = calendar.Calendar(firstweekday=0)  # 0 = lundi
-
-    # Liste des dates à afficher (inclut les dates hors mois pour compléter la grille)
+    cal = calendar.Calendar(firstweekday=0)  # Lundi
     jours = list(cal.itermonthdates(annee, mois))
 
-    # Conversion nom du jour → numéro du jour (Lundi=0, Mardi=1, ...)
     mapping_jours = {
         "Lundi": 0, "Mardi": 1, "Mercredi": 2,
         "Jeudi": 3, "Vendredi": 4, "Samedi": 5, "Dimanche": 6
@@ -516,26 +513,29 @@ def construire_calendrier(mois, annee, donnees):
     for item in donnees:
         jour_nom = item["jour"]
 
-        # Jour de la semaine du 1er du mois
-        premier_jour = datetime(annee, mois, 1).weekday()
+        if jour_nom == "Toute la semaine":
+            for j in jours:
+                if j.month == mois:
+                    events_by_date.setdefault(j, []).append({
+                        "titre": item["matiere_detail"]["nom"],
+                        "heure": f"{item['heure_debut'][:5]} - {item['heure_fin'][:5]}",
+                        "prof": f"{item['professeur_detail']['nom']} {item['professeur_detail']['prenom']}",
+                        "classe": item["classe_detail"]["nom"],
+                    })
+            continue
 
-        # Trouver le premier jour correspondant dans le mois (ex: premier lundi)
+        premier_jour = datetime(annee, mois, 1).weekday()
         decalage = (mapping_jours[jour_nom] - premier_jour) % 7
         jour_numero = 1 + decalage
-
         date_event = date(annee, mois, jour_numero)
 
-        if date_event not in events_by_date:
-            events_by_date[date_event] = []
-
-        events_by_date[date_event].append({
+        events_by_date.setdefault(date_event, []).append({
             "titre": item["matiere_detail"]["nom"],
             "heure": f"{item['heure_debut'][:5]} - {item['heure_fin'][:5]}",
             "prof": f"{item['professeur_detail']['nom']} {item['professeur_detail']['prenom']}",
             "classe": item["classe_detail"]["nom"],
         })
 
-    # Construire structure exploitable dans le template
     calendrier = []
     for j in jours:
         calendrier.append({
@@ -557,7 +557,6 @@ def emploi(request, pk):
     professeurs_list = APIService.get_list("professeurs")
     auth_token = request.session.get('auth_token')
 
-    # === AJOUT EMPLOI ===
     if request.method == "POST":
         data = {
             "filiere": fil.id,
@@ -573,21 +572,16 @@ def emploi(request, pk):
 
         if response and "error" not in response:
             messages.success(request, "Ajouté avec succès")
-        elif response and "error" in response:
-            messages.error(request, f"Erreur lors de l’ajout : {response['error']}")
         else:
-            messages.error(request, "Erreur : aucune réponse reçue du serveur.")
+            messages.error(request, "Erreur lors de l’ajout")
 
         return redirect("emploi", pk=fil.id)
 
-    # === LISTE EMPLOIS ===
     emp = EmploiDuTemps.objects.filter(filiere=fil.id)
 
-    # === PARAMÈTRES DU CALENDRIER ===
     mois = 12
     annee = 2025
 
-    # Conversion Queryset → données compatibles
     emp_dict = [
         {
             "jour": e.jour,
@@ -599,6 +593,7 @@ def emploi(request, pk):
         }
         for e in emp
     ]
+
     jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
 
     calendrier = construire_calendrier(mois, annee, emp_dict)
@@ -612,11 +607,12 @@ def emploi(request, pk):
         'classes_list': classes_list,
         'professeurs_list': professeurs_list,
         'calendrier': calendrier,
-        'jours':jours,
+        'jours': jours,
         'mois': mois,
         'annee': annee,
         'show_sidebar': True,
     })
+
 
 def edit_emploi(request, pk):
     menu = load_menu()
