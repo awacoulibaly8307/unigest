@@ -584,7 +584,7 @@ def emploi(request, pk):
     emp = EmploiDuTemps.objects.filter(filiere=fil.id)
 
     # === PARAMÈTRES DU CALENDRIER ===
-    mois = 12     # 👉 tu peux rendre dynamique plus tard
+    mois = 12
     annee = 2025
 
     # Conversion Queryset → données compatibles
@@ -599,7 +599,7 @@ def emploi(request, pk):
         }
         for e in emp
     ]
-    jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"]
+    jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
 
     calendrier = construire_calendrier(mois, annee, emp_dict)
 
