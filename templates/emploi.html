@@ -153,49 +153,52 @@
   </div>
 </div>
 
-  <!-- Conteneur du tableau, avec overflow-x-auto pour gérer le responsive -->
-    <div class="grid grid-cols-7 border rounded-lg overflow-hidden bg-white shadow">
+  <div class="flex justify-between items-center mb-6">
+  <a href="?mois={{ mois|add:-1 }}&annee={{ annee }}"
+     class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+    ◀ Précédent
+  </a>
 
-  <!-- En-têtes des jours -->
+  <h2 class="text-xl font-bold text-blue-900">
+    {{ nom_mois }} {{ annee }}
+  </h2>
+
+  <a href="?mois={{ mois|add:1 }}&annee={{ annee }}"
+     class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+    Suivant ▶
+  </a>
+</div>
+
+<div class="grid grid-cols-7 border rounded-lg overflow-hidden bg-white shadow">
+
+  <!-- En-têtes -->
   {% for j in jours %}
-  <div class="p-3 text-center bg-blue-900 text-white font-semibold uppercase text-sm border-r last:border-r-0">
+  <div class="p-3 text-center bg-blue-900 text-white font-semibold text-sm">
     {{ j }}
   </div>
   {% endfor %}
 
-  <!-- Cases du calendrier -->
+  <!-- Jours -->
   {% for j in calendrier %}
-  <div class="relative border box-border p-2 h-44 sm:h-48 overflow-y-auto bg-white
-              {% if not j.dans_mois %} bg-gray-100 text-gray-400 {% else %} hover:bg-blue-50 {% endif %}">
-    <!-- BADGE NUMERO DU JOUR (positionné au dessus) -->
-    <div class="absolute top-2 right-2 z-20">
-      <div class="bg-white/90 text-sm font-bold px-2 py-0.5 rounded-md shadow-sm">
-        {{ j.date.day }}
-      </div>
+  <div class="relative border p-2 h-48 overflow-y-auto
+      {% if not j.dans_mois %} bg-gray-100 text-gray-400 {% else %} hover:bg-blue-50 {% endif %}">
+
+    <!-- Numéro du jour -->
+    <div class="absolute top-2 right-2 bg-white text-xs font-bold px-2 py-0.5 rounded shadow">
+      {{ j.date.day }}
     </div>
 
-    <!-- Contenu principal (on lui réserve de l'espace avec pt-10 pour ne pas chevaucher le badge) -->
-    <div class="pt-10">
-      <!-- Événements -->
+    <div class="pt-8 space-y-2">
       {% for ev in j.events %}
-      <div class="bg-blue-700 text-white text-xs rounded-lg p-2 mb-2 shadow-sm
-                  break-words whitespace-normal">
-        <div class="font-semibold text-sm leading-tight">{{ ev.titre }}</div>
-
-        <div class="flex items-center gap-1 mt-1 text-xs opacity-95">
-          🕒 {{ ev.heure }}
-        </div>
-
-        <div class="text-xs opacity-90 mt-1 truncate">
-          {{ ev.prof }}
-        </div>
-
-        <div class="text-xs opacity-90 truncate">
-          {{ ev.classe }}
-        </div>
+      <div class="bg-blue-700 text-white text-xs rounded-lg p-2 shadow">
+        <div class="font-semibold">{{ ev.titre }}</div>
+        <div>🕒 {{ ev.heure }}</div>
+        <div class="truncate">{{ ev.prof }}</div>
+        <div class="truncate">{{ ev.classe }}</div>
       </div>
       {% endfor %}
     </div>
+
   </div>
   {% endfor %}
 </div>

@@ -504,8 +504,13 @@ def construire_calendrier(mois, annee, donnees):
     jours = list(cal.itermonthdates(annee, mois))
 
     mapping_jours = {
-        "Lundi": 0, "Mardi": 1, "Mercredi": 2,
-        "Jeudi": 3, "Vendredi": 4, "Samedi": 5, "Dimanche": 6
+        "Lundi": 0,
+        "Mardi": 1,
+        "Mercredi": 2,
+        "Jeudi": 3,
+        "Vendredi": 4,
+        "Samedi": 5,
+        "Dimanche": 6,
     }
 
     events_by_date = {}
@@ -513,6 +518,7 @@ def construire_calendrier(mois, annee, donnees):
     for item in donnees:
         jour_nom = item["jour"]
 
+        # 👉 Toute la semaine
         if jour_nom == "Toute la semaine":
             for j in jours:
                 if j.month == mois:
@@ -524,8 +530,9 @@ def construire_calendrier(mois, annee, donnees):
                     })
             continue
 
-        premier_jour = datetime(annee, mois, 1).weekday()
-        decalage = (mapping_jours[jour_nom] - premier_jour) % 7
+        # 👉 Jour précis (ex: Lundi)
+        premier_jour_mois = datetime(annee, mois, 1).weekday()
+        decalage = (mapping_jours[jour_nom] - premier_jour_mois) % 7
         jour_numero = 1 + decalage
         date_event = date(annee, mois, jour_numero)
 
@@ -557,6 +564,10 @@ def emploi(request, pk):
     professeurs_list = APIService.get_list("professeurs")
     auth_token = request.session.get('auth_token')
 
+    # Mois & année dynamiques
+    mois = int(request.GET.get("mois", date.today().month))
+    annee = int(request.GET.get("annee", date.today().year))
+
     if request.method == "POST":
         data = {
             "filiere": fil.id,
@@ -577,10 +588,16 @@ def emploi(request, pk):
 
         return redirect("emploi", pk=fil.id)
 
+        # Sécurité navigation
+    if mois < 1:
+       mois = 12
+       annee -= 1
+    elif mois > 12:
+      mois = 1
+      annee += 1
+
     emp = EmploiDuTemps.objects.filter(filiere=fil.id)
 
-    mois = 12
-    annee = 2025
 
     emp_dict = [
         {
@@ -594,8 +611,7 @@ def emploi(request, pk):
         for e in emp
     ]
 
-    jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
-
+    jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
     calendrier = construire_calendrier(mois, annee, emp_dict)
 
     return render(request, 'emploi.html', {
@@ -607,6 +623,7 @@ def emploi(request, pk):
         'classes_list': classes_list,
         'professeurs_list': professeurs_list,
         'calendrier': calendrier,
+        "nom_mois": calendar.month_name[mois],
         'jours': jours,
         'mois': mois,
         'annee': annee,
@@ -1005,3 +1022,4 @@ def delete_evaluation(request, pk):
             messages.error(request, f"Erreur inattendue : {e}")
             print(f"Erreur inattendue : {e}")
     return redirect("evaluation")
+
