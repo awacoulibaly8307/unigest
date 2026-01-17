@@ -1022,4 +1022,3 @@ def delete_evaluation(request, pk):
             messages.error(request, f"Erreur inattendue : {e}")
             print(f"Erreur inattendue : {e}")
     return redirect("evaluation")
-
